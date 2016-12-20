@@ -4,8 +4,8 @@ var _ = require('lodash');
 var uuid = require('uuid');
 var moment = require('moment');
 var path = require('path');
-var dereferenceJSON = require('extendr').dereferenceJSON;
-var imageToAscii = require("image-to-ascii")
+var imageToAscii = require("image-to-ascii");
+var CircularJSON = require('circular-json');
 
 /**
  * This plugin does few things:
@@ -212,7 +212,7 @@ protractorUtil.writeReport = function(context) {
         generatedOn: new Date()
     };
 
-    fse.outputFile(file, JSON.stringify(dereferenceJSON(data)), function(err) {
+    fse.outputFile(file, CircularJSON.stringify(data), function(err) {
         if (err) protractorUtil.logDebug(err);
         protractorUtil.joinReports(context);
     });
