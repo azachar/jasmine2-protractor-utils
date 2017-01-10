@@ -52,7 +52,7 @@
   "devDependencies": {
     "cz-conventional-changelog": "^1.2.0",
     "jasmine": "^2.5.2",
-    "protractor": "^4.0.14",
+    "protractor": "^5.0.0",
     "standard-version": "^4.0.0"
   },
   "config": {
