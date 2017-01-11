@@ -1,18 +1,30 @@
-describe('angularjs homepage', function() {
-  it('should open two browsers', function() {
-    browser.get('http://www.angularjs.org');
-    screenshotBrowsers.first=browser;
+var protractorUtils = require('../../../index');
 
-    var b = browser.forkNewDriverInstance();
-    screenshotBrowsers.second=b;
-    b.get('http://www.angularjs.org');
+describe('angularjs homepage', function () {
 
-    element(by.model('yourName')).sendKeys('First Browser');
-    var greeting = element(by.binding('yourName'));
+  var firstBrowser = null;
+  var secondBrowser = null;
+
+  beforeAll(function () {
+    firstBrowser = protractorUtils.addScreenshotBrowser('first');
+    secondBrowser = protractorUtils.addScreenshotBrowser('second', true);
+  });
+
+  afterAll(function () {
+    protractorUtils.removeScreenshotBrowser('first');
+    protractorUtils.removeScreenshotBrowser('second');
+  });
+
+  it('should open two browsers', function () {
+    firstBrowser.get('http://www.angularjs.org');
+    secondBrowser.get('http://www.angularjs.org');
+
+    firstBrowser.element(by.model('yourName')).sendKeys('First Browser');
+    var greeting = firstBrowser.element(by.binding('yourName'));
     expect(greeting.getText()).toEqual('Hello First Browser!');
 
-    b.element(by.model('yourName')).sendKeys('Second Browser');
-    greeting = b.element(by.binding('yourName'));
+    secondBrowser.element(by.model('yourName')).sendKeys('Second Browser');
+    greeting = secondBrowser.element(by.binding('yourName'));
     expect(greeting.getText()).toEqual('Hello Second Browser!');
   });
 });

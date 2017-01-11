@@ -1,33 +1,37 @@
-describe('angularjs homepage', function() {
+var protractorUtils = require('../../../index');
 
-    it('should generate console errors', function() {
-        browser.get('http://www.angularjs.org');
-        element(by.model('yourName')).sendKeys('Julie');
-        var greeting = element(by.binding('yourName'));
-        expect(greeting.getText()).toEqual('Hello Julie!');
+describe('angularjs homepage', function () {
 
-        browser.executeScript('console.error("sample error")');
-        browser.executeScript('console.warn("sample warning")');
-        browser.executeScript('console.info("sample info")');
-        browser.executeScript('console.log("sample log")');
-    });
+  afterAll(function () {
+    protractorUtils.removeAllScreenshotBrowsers();
+  });
 
-    it('should generate console errors in 2 browsers', function() {
-      browser.get('http://www.angularjs.org');
-      screenshotBrowsers.first=browser;
+  it('should generate console errors', function () {
+    browser.get('http://www.angularjs.org');
+    element(by.model('yourName')).sendKeys('Julie');
+    var greeting = element(by.binding('yourName'));
+    expect(greeting.getText()).toEqual('Hello Julie!');
 
-      var b = browser.forkNewDriverInstance();
-      screenshotBrowsers.second=b;
-      b.get('http://www.angularjs.org');
+    browser.executeScript('console.error("sample error")');
+    browser.executeScript('console.warn("sample warning")');
+    browser.executeScript('console.info("sample info")');
+    browser.executeScript('console.log("sample log")');
+  });
 
-      element(by.model('yourName')).sendKeys('Julie');
-      var greeting = element(by.binding('yourName'));
-      expect(greeting.getText()).toEqual('Hello Julie!');
+  it('should generate console errors in 2 browsers', function () {
+    var firstBrowser = protractorUtils.addScreenshotBrowser('first');
+    firstBrowser.get('http://www.angularjs.org');
 
-      b.executeScript('console.error("sample second browser error")');
-      b.executeScript('console.warn("sample second browser warning")');
-      b.executeScript('console.info("sample second browser info")');
-      b.executeScript('console.log("sample second browser log")');
+    var secondBrowser = protractorUtils.addScreenshotBrowser('second');
+    secondBrowser.get('http://www.angularjs.org');
 
-    });
+    firstBrowser.element(by.model('yourName')).sendKeys('Julie');
+    var greeting = firstBrowser.element(by.binding('yourName'));
+    expect(greeting.getText()).toEqual('Hello Julie!');
+
+    secondBrowser.executeScript('console.error("sample second browser error")');
+    secondBrowser.executeScript('console.warn("sample second browser warning")');
+    secondBrowser.executeScript('console.info("sample second browser info")');
+    secondBrowser.executeScript('console.log("sample second browser log")');
+  });
 });

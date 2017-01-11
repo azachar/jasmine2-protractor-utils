@@ -35,13 +35,14 @@ var CircularJSON = require('circular-json');
  */
 var protractorUtil = function() {};
 
+protractorUtil.screenshotBrowsers = {};
 protractorUtil.logDebug = function() {};
 protractorUtil.logInfo = console.info;
 
 protractorUtil.forEachBrowser = function(action) {
     try {
-        if (global.screenshotBrowsers && Object.keys(global.screenshotBrowsers).length > 0) {
-            _.forOwn(global.screenshotBrowsers, function(instance, name) {
+        if (protractorUtil.screenshotBrowsers && Object.keys(protractorUtil.screenshotBrowsers).length > 0) {
+            _.forOwn(protractorUtil.screenshotBrowsers, function(instance, name) {
                 action(instance, name);
             });
         } else {
@@ -284,8 +285,6 @@ protractorUtil.registerJasmineReporter = function(context) {
 
     jasmine.getEnv().addReporter({
         jasmineStarted: function() {
-            global.screenshotBrowsers = {};
-
             protractorUtil.testResults = [];
             protractorUtil.stat = {};
             if (context.config.htmlReport) {
@@ -395,6 +394,40 @@ protractorUtil.failTestOnErrorLog = function(context) {
             protractorUtil.takeLogs(context, verifyConsole);
         });
     });
+};
+
+/**
+ * Add a new browser instance
+ * @param name name of the browser instance
+ * @param skipImageToAscii disable generating ASCII images (optional, default: false)
+ * @returns {*} browser instance
+ */
+protractorUtil.prototype.addScreenshotBrowser = function (name, skipImageToAscii) {
+    skipImageToAscii = (typeof skipImageToAscii === 'undefined') ? false : skipImageToAscii;
+    var browserInstance = null;
+    if (_.isEmpty(protractorUtil.screenshotBrowsers)) {
+        browserInstance = global.browser;
+    } else {
+        browserInstance = global.browser.forkNewDriverInstance();
+    }
+    browserInstance.skipImageToAscii = skipImageToAscii;
+    protractorUtil.screenshotBrowsers[name] = browserInstance;
+    return browserInstance;
+};
+
+/**
+ * Remove a browser instance
+ * @param name browser name to remove
+ */
+protractorUtil.prototype.removeScreenshotBrowser = function (name) {
+    delete protractorUtil.screenshotBrowsers[name];
+};
+
+/**
+ * Remove all browser instances (cleanup)
+ */
+protractorUtil.prototype.removeAllScreenshotBrowsers = function () {
+    protractorUtil.screenshotBrowsers = {};
 };
 
 /**

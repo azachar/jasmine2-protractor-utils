@@ -3,6 +3,7 @@
   "version": "0.3.1",
   "description": "A jasmine2 protractor plugin that captures for each browser instance a screenshot and browsers' console logs. The snapshot is made optionally for each expect or spec. Plugins comes with a beautiful angular based analytics tool to visually check and fix tests results.",
   "main": "index.js",
+  "typings": "index.d.ts",
   "scripts": {
     "setup": "webdriver-manager update",
     "server": "webdriver-manager start",

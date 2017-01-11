@@ -5,3 +5,4 @@ coverage
 .travis.yml
 .tmp
 tmp
+.idea

@@ -136,27 +136,19 @@ In order to use multi-browser chat alike testing, you need to keep a track of al
 
 You can do it like this
 
-```
-var a  = browser.forkNewDriverInstance();
-var b  = browser.forkNewDriverInstance();
-
-global.screenshotBrowsers['anyCustomNameOfBrowserDisplayedInReports'] = a;
-global.screenshotBrowsers.userB = b;
+```js
+var a = protractorUtils.addScreenshotBrowser('first');
+var b = protractorUtils.addScreenshotBrowser('second');
 ```
 
-if you close the browser, remove it also from global.screenshotBrowsers After closing browser making screenshots won't work. Make sense, right no browser no screenshot.
+if you close the browser, remove it. After closing browser making screenshots won't work. Make sense, right no browser no screenshot.
 
-```
-delete global.screenshotBrowsers.userB;
+```js
+protractorUtils.removeScreenshotBrowser('first');
+protractorUtils.removeScreenshotBrowser('second');
 ```
 
-to reset screenshotBrowsers from your previous spec use this code
-
-```
-beforeAll(function() {
-    global.screenshotBrowsers = {};
-  });
-```
+For more details see 'multi-browser-instance-test.js'
 
 ## Running tests in parallel
 
@@ -234,8 +226,9 @@ Please note that one of the options of `screenshotOnExpect` or `screenshotOnSpec
 If you are using multiple browsers instances you can disable generating ASCII images individually by setting
 
 ```js
-browser.skipImageToAscii = true;
+var a = protractorUtils.addScreenshotBrowser('first', true);
 ```
+
 Then this browser instance will be not generated in the log file.
 
 Default: 'failure' Valid Options: 'failure+success'/'failure'/'none'

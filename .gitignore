@@ -2,3 +2,6 @@ node_modules
 reports
 coverage
 .tmp
+tmp
+.idea
+*.log
