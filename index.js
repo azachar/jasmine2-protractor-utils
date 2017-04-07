@@ -1,3 +1,4 @@
+var fs = require('fs');
 var fse = require('fs-extra');
 var mkdirp = require('mkdirp');
 var _ = require('lodash');
@@ -15,6 +16,7 @@ var assert = require('assert');
  *   2. Takes a screenshot for each test/spec failure
  *   3. Generates a HTML report
  *   4. Marks the test as failure if browser console log has error - Chrome only
+ *   5. Allows user to report logs which can be attached to the reporter
  *
  *    exports.config = {
  *      plugins: [{
@@ -37,6 +39,7 @@ var assert = require('assert');
  */
 var protractorUtil = function() {};
 
+protractorUtil.userLogDirectory = './logs';
 protractorUtil.logDebug = function() {};
 protractorUtil.logInfo = console.info;
 
@@ -258,7 +261,8 @@ protractorUtil.joinReports = function(context, done) {
             disabled: 0
         },
         ci: ci,
-        generatedOn: new Date()
+        generatedOn: new Date(),
+        userLogs: ''
     };
 
     //concat all tests
@@ -279,6 +283,8 @@ protractorUtil.joinReports = function(context, done) {
             return done(err);
         }
     }
+
+    data.userLogs = protractorUtil.getLogs();
 
     var before = "angular.module('reporter').constant('data',";
     var after = ");";
@@ -301,6 +307,17 @@ protractorUtil.installReporter = function(context) {
         console.error(err);
         return;
     }
+};
+
+protractorUtil.getLogs = function () {
+    var logs = '';
+    try {
+       logs = fs.readFileSync(protractorUtil.userLogDirectory + '/log.txt', 'utf-8');
+    } catch (err) {
+        console.error(err);
+        return '';
+    }
+    return logs;
 };
 
 protractorUtil.registerJasmineReporter = function(context) {
@@ -435,10 +452,11 @@ protractorUtil.prototype.setup = function() {
         },
         htmlReport: true,
         writeReportFreq: 'end'
-    }
+    };
 
     this.config = _.merge({}, defaultSettings, this.config);
     this.config.reportFile = this.config.screenshotPath + '/reports/' + uuid.v1() + '.js';
+    protractorUtil.userLogDirectory = this.config.screenshotPath + '/logs';
 
     if (this.config.verbose === 'debug') {
         protractorUtil.logDebug = console.log;
@@ -466,6 +484,14 @@ protractorUtil.prototype.setup = function() {
             console.error(err);
         } else {
             protractorUtil.logDebug(self.config.screenshotPath + '/reports' + ' folder created!');
+        }
+    });
+
+    mkdirp.sync(protractorUtil.userLogDirectory, function(err) {
+        if (err) {
+            console.error(err);
+        } else {
+            protractorUtil.logDebug(protractorUtil.userLogDirectory + ' folder created!');
         }
     });
 
@@ -538,4 +564,17 @@ protractorUtil.prototype.teardown = function() {
     return deferred.promise;
 };
 
+log = function (message) {
+
+    var dateNow = moment().toDate();
+    message = '[' + dateNow + '] - ' + message + '\r\n';
+    try{
+        fs.appendFileSync(protractorUtil.userLogDirectory + '/log.txt', message);
+    }   catch(err) {
+        console.error(err);
+    }
+};
+
 module.exports = new protractorUtil();
+module.exports.log = log;
+
