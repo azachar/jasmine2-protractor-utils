@@ -3,6 +3,7 @@ var path = require('path');
 
 var fs = require('fs-extra');
 var cp = require('child_process');
+var _ = require('lodash');
 
 function runProtractorWithConfig(configName) {
     var command = 'protractor ./spec/integrational/protractor-config/' + configName;
@@ -126,6 +127,9 @@ describe("Screenshoter running under protractor", function() {
                 expect(report.tests[2].passedExpectations[1].screenshots[0].browser).toBeDefined();
                 expect(report.tests[2].passedExpectations[1].screenshots[0].when).toBeDefined();
 
+                expect(report.userLogs).toBeDefined();
+                expect(_.includes((report.userLogs), 'Added todos')).toEqual(true);
+                expect(_.includes((report.userLogs), 'Listing todos')).toEqual(true);
                 done();
             });
         });
