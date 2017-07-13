@@ -4,10 +4,17 @@ var _ = require('lodash');
 var uuid = require('uuid');
 var moment = require('moment');
 var path = require('path');
-var imageToAscii = require("image-to-ascii");
 var CircularJSON = require('circular-json');
 var q = require('q');
 var assert = require('assert');
+
+try {  // optional dependency, ignore if not installed
+    var imageToAscii = require("image-to-ascii");
+} catch(e) {
+    if (e.code !== 'MODULE_NOT_FOUND') {
+        throw e;
+    }
+}
 
 /**
  * This plugin does few things:
@@ -141,6 +148,9 @@ protractorUtil.takeScreenshotOnExpectDone = function(context) {
                 });
                 if (makeAsciiLog && !browserInstance.skipImageToAscii) {
                     try {
+                        if (!imageToAscii) {
+                            throw new Error('image-to-ascii is not installed');
+                        }
                         imageToAscii(finalFile, context.config.imageToAsciiOpts, function(err, converted) {
                             var asciImage;
                             asciImage += '\n\n============================\n';
