@@ -89,6 +89,7 @@ exports.config = {
        failTestOnErrorLog: {
                 failTestOnErrorLogLevel: {Number},  (Default - 900)
                 excludeKeywords: {A JSON Array}
+                suites: {A JSON Array}
            }
        }],
        onPrepare: function () {
@@ -295,6 +296,12 @@ Default: 900
 An array of keywords to be excluded, while searching for error logs. i.e If a log contains any of these keywords, spec/test will not be marked failed.
 
 Please do not specify this flag, if you don't supply any such keywords.
+
+### suites
+
+An array of `suites` (protractor.config.suites) where the failTestOnErrorLog will run.
+
+Please do not specify this flag, if you want all your tests to run through this failTestOnErrorLog validation.
 
 # Development
 

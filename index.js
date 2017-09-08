@@ -29,6 +29,7 @@ var assert = require('assert');
  *      failTestOnErrorLog: {
  *               failTestOnErrorLogLevel: {Number},  (Default - 900)
  *               excludeKeywords: {A JSON Array}
+ *               suites: {A JSON Array}
  *          }
  *       }]
  *    };
@@ -388,6 +389,19 @@ protractorUtil.failTestOnErrorLog = function(context) {
         });
 
         afterEach(function() {
+
+            /*
+             * Verifies if the `suite` where tests are running is present on the `failTestOnErrorLog.suites` list
+             */
+            function isAValidSuite() {
+                //If there are no suites defined the default value is 'ALL'
+                if(!context.config.failTestOnErrorLog.suites) {
+                    return true;
+                }
+
+                return (context.config.failTestOnErrorLog.suites.indexOf(browser.getProcessedConfig().value_.suite) > -1);
+            }
+
             /*
              * Verifies that console has no error logs, if error log is there test is marked as failure
              */
@@ -398,7 +412,7 @@ protractorUtil.failTestOnErrorLog = function(context) {
                     browserLogs.forEach(function(log) {
                         var logLevel = context.config.failTestOnErrorLog.failTestOnErrorLogLevel ? context.config.failTestOnErrorLog.failTestOnErrorLogLevel : 900;
                         var flag = false;
-                        if (log.level.value > logLevel) { // it's an error log
+                        if ((log.level.value > logLevel) && isAValidSuite()) { // it's an error log && is a valid suite
                             if (context.config.failTestOnErrorLog.excludeKeywords) {
                                 context.config.failTestOnErrorLog.excludeKeywords.forEach(function(keyword) {
                                     if (log.message.search(keyword) > -1) {
