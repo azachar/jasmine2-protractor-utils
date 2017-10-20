@@ -40,7 +40,7 @@
   },
   "homepage": "https://github.com/azachar/protractor-screenshoter-plugin",
   "dependencies": {
-    "circular-json": "^0.3.1",
+    "circular-json": "^0.4.0",
     "fs-extra": "^1.0.0",
     "image-to-ascii": "^3.0.5",
     "lodash": "^4.17.3",
