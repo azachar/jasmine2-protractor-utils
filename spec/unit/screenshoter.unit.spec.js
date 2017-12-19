@@ -1,4 +1,6 @@
 var fse = require('fs-extra');
+var fs = require('fs');
+var _ = require('lodash');
 
 describe("Screenshoter unit", function() {
 
@@ -130,5 +132,17 @@ describe("Screenshoter unit", function() {
         });
     });
 
-
+    it("should write user logs", function () {
+        screenshoter.config = {
+            screenshotPath: 'REPORTS',
+        };
+        screenshoter.setup();
+        screenshoter.log('test');
+        var logs = fs.readFileSync(screenshoter.config.screenshotPath + '/logs' + '/log.txt', 'utf-8');
+        expect(_.includes(logs, 'test')).toEqual(true);
+        screenshoter.log('check');
+        logs = fs.readFileSync(screenshoter.config.screenshotPath + '/logs' + '/log.txt', 'utf-8');
+        expect(_.includes(logs, 'test')).toEqual(true);
+        expect(_.includes(logs, 'check')).toEqual(true);
+    });
 });

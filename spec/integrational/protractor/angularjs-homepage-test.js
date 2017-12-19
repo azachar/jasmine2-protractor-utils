@@ -1,4 +1,5 @@
 /*The MIT License, Copyright (c) 2010-2016 Google, Inc.*/
+var reporter = require('../../../index.js');
 
 describe('angularjs homepage', function() {
   it('should greet the named user', function() {
@@ -21,6 +22,7 @@ describe('angularjs homepage', function() {
     });
 
     it('should list todos', function() {
+      reporter.log('Listing todos');
       expect(todoList.count()).toEqual(2);
       expect(todoList.get(1).getText()).toEqual('build an AngularJS app');
     });
@@ -28,6 +30,7 @@ describe('angularjs homepage', function() {
     it('should add a todo', function() {
       var addTodo = element(by.model('todoList.todoText'));
       var addButton = element(by.css('[value="add"]'));
+      reporter.log('Added todos');
 
       addTodo.sendKeys('write a protractor test');
       addButton.click();
