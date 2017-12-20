@@ -83,7 +83,7 @@ exports.config = {
        writeReportFreq: {String}      (Default - 'end', 'spec', 'asap'),
        verbose: {String} (Default - 'info', 'debug'),
        pauseOn: {String}    (Default - 'never', 'failure', 'spec'),
-       imageToAscii: {String}    (Default - 'failure+success', 'failure', 'none'),
+       imageToAscii: {String}    (Default - 'none', 'failure+success', 'failure'),
        imageToAsciiOpts:{Obbject} (Default - {bg:true})
        clearFoldersBeforeTest: {Boolean}       (Default - false),
        failTestOnErrorLog: {
@@ -113,7 +113,7 @@ exports.config = {
         screenshotOnSpec: 'none',
         withLogs: 'true',
         writeReportFreq: 'asap',
-        imageToAscii: 'failure',
+        imageToAscii: 'none',
         clearFoldersBeforeTest: true
     }],
 
@@ -136,7 +136,7 @@ In order to use multi-browser chat alike testing, you need to keep a track of al
 
 You can do it like this
 
-```
+```javascript
 var a  = browser.forkNewDriverInstance();
 var b  = browser.forkNewDriverInstance();
 
@@ -152,7 +152,7 @@ delete global.screenshotBrowsers.userB;
 
 to reset screenshotBrowsers from your previous spec use this code
 
-```
+```javascript
 beforeAll(function() {
     global.screenshotBrowsers = {};
   });
@@ -242,6 +242,11 @@ Default: 'failure' Valid Options: 'failure+success'/'failure'/'none'
 
 To use this feature please follow instructions on <https://github.com/IonicaBizau/image-to-ascii/blob/master/INSTALLATION.md>
 
+and also please install the optional dependency
+```
+npm install image-to-ascii
+```
+
 ## imageToAsciiOpts
 
 Options for imageToAscii conversion, more info can be found at <https://github.com/IonicaBizau/image-to-ascii>
@@ -308,6 +313,64 @@ After cloning the project you can run tests as follows:
 ## Committing
 
 Please use `git-cz` to format your commit message.
+
+## Contributing
+- Your PR is more than welcome!
+- Please include always tests in your PR.
+- If you find a bug, please create a test case for it that fails first, then write your fix. If all passes on Travis, feel free to provide PR.
+
+### How to write tests for your contribution
+
+We are testing our plugin for protractor,
+
+1. so we need an e2e protractor test.
+
+  There are already some e2e tests in ``spec/integrational/protractor`` that can be reused. Basically, we run sample e2e tests against http://www.angularjs.org. So if this page is changed or inaccessible our tests will fail too :(
+
+  ***Note***: *Any PR that will create a local dummy server that our sample tests will run against is welcome :)*
+
+2. Then we need a screenshoter configuration that we will run the protractor e2e tests against. Please write your new config in
+``spec/integrational/protractor-config\bugXXX.js``
+
+3. Please always specify a unique directory for your new screenshoter config, so it doesn't interfere with the existing tests.
+
+  ```js
+  var env = require('../environment');
+
+  exports.config = {
+      seleniumAddress: env.seleniumAddress,
+      framework: 'jasmine2',
+      specs: ['../protractor/angularjs-homepage-test.js'],
+      plugins: [{
+          path: '../../../index.js',
+
+          screenshotPath: '.tmp/bugXXX',
+      }]
+  };
+  ```
+
+4. write your jasmine test (copy the whole describe block from existing one and modify it to your needs).
+
+  Mainly modify
+  ```js
+    beforeAll(function() {
+        runProtractorWithConfig('bugXXX.js');
+    });
+  ```
+
+To check results from protractor e2e tests, simply run
+
+```
+node_modules/protractor/bin/protractor spec/integrational/protractor-config/bugXXX.js
+```
+
+Then you can tweak your jasmine test to check the correct behavior of your screenshoter bugfix or feature.
+
+5. to run jasmine tests use  `npm test` after
+  1. `npm install`
+  2. `npm run setup` This will install webdriver
+  3. `npm run server &` This will run selenium server
+
 
 ### Releasing
 

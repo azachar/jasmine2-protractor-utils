@@ -24,6 +24,26 @@ function runProtractorWithConfig(configName) {
     }
 }
 
+function installOptionaDependencies() {
+    var command = 'npm install image-to-ascii';
+    console.info('Running command ' + command);
+    try {
+        cp.execSync(command, {
+            // stdio: [0, 1, 2] //for full debug
+            stdio: env.debug ? [0, 1, 2]: [2]
+        });
+        console.info('Done with command ' + command);
+        return true;
+    } catch (er) {
+        //console.log(er.stack);
+        if (er.pid) {
+            console.log('%s (pid: %d) exited with status %d',
+                er.file, er.pid, er.status);
+        }
+        return false;
+    }
+}
+
 function getReportAsJson(data) {
     var before = "angular.module('reporter').constant('data',";
     var after = ");";
@@ -818,5 +838,67 @@ describe("Screenshoter running under protractor", function() {
 
     });
 
+    describe("optional configuration with imageToAscii 'failure'", function() {
+
+        beforeAll(function() {
+            installOptionaDependencies();
+            runProtractorWithConfig('imageToAscii.js');
+        });
+
+        it("should generate report.js", function(done) {
+            fs.readFile('.tmp/imageToAscii/report.js', 'utf8', function(err, data) {
+                if (err) {
+                    return done.fail(err);
+                }
+                expect(data).toContain("angular.module('reporter').constant('data'");
+
+                var report = getReportAsJson(data);
+                expect(report.stat.passed).toBe(1);
+                expect(report.stat.failed).toBe(1);
+                expect(report.generatedOn).toBeDefined();
+                expect(report.ci).toBeDefined();
+                expect(report.ci.build).toBeDefined();
+                expect(report.ci.tag).toBeDefined();
+                expect(report.ci.sha).toBeDefined();
+                expect(report.ci.branch).toBeDefined();
+                expect(report.ci.name).toBeDefined();
+
+                expect(report.tests.length).toBe(2);
+                expect(report.tests[0].specLogs.length).toBe(0);
+                expect(report.tests[0].specScreenshots.length).toBe(1);
+                expect(report.tests[0].specScreenshots[0].img).toBeDefined();
+                expect(report.tests[0].specScreenshots[0].browser).toBeDefined();
+                expect(report.tests[0].specScreenshots[0].when).toBeDefined();
+
+                expect(report.tests[0].passedExpectations.length).toBe(0);
+                expect(report.tests[0].failedExpectations.length).toBe(1);
+                expect(report.tests[0].failedExpectations[0].logs.length).toBeLessThan(2);
+                expect(report.tests[0].failedExpectations[0].screenshots.length).toBe(1);
+                expect(report.tests[0].failedExpectations[0].screenshots[0].img).toBeDefined();
+                expect(report.tests[0].failedExpectations[0].screenshots[0].browser).toBeDefined();
+                expect(report.tests[0].failedExpectations[0].screenshots[0].when).toBeDefined();
+
+                expect(report.tests[1].specLogs.length).toBe(0);
+                expect(report.tests[1].specScreenshots.length).toBe(0);
+
+                expect(report.tests[1].failedExpectations.length).toBe(0);
+                expect(report.tests[1].passedExpectations.length).toBe(1);
+                expect(report.tests[1].passedExpectations[0].logs.length).toBeLessThan(2);
+                expect(report.tests[1].passedExpectations[0].screenshots.length).toBe(0);
+
+                done();
+            });
+        });
+
+        it("should generate failure screenshots", function(done) {
+            fs.readdir('.tmp/imageToAscii/screenshots', function(err, items) {
+                if (err) {
+                    return done.fail(err);
+                }
+                expect(items.length).toEqual(2);
+                done();
+            });
+        });
+    });
 
 });
