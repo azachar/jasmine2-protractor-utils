@@ -4,12 +4,13 @@ var path = require('path');
 var fs = require('fs-extra');
 var cp = require('child_process');
 
-function runProtractorWithConfig(configName) {
+function runProtractorWithConfig(configName, params) {
   var command;
+  params = params ? ' ' + params : '';
   if (env.coverage) {
-    command = 'istanbul cover --print none --report lcovonly --dir coverage/' + configName + ' node_modules/protractor/bin/protractor ./spec/integrational/protractor-config/' + configName;
+    command = 'istanbul cover --print none --report lcovonly --dir coverage/' + configName + ' node_modules/protractor/bin/protractor ./spec/integrational/protractor-config/' + configName + params;
   } else {
-    command = 'node_modules/protractor/bin/protractor ./spec/integrational/protractor-config/' + configName;
+    command = 'node_modules/protractor/bin/protractor ./spec/integrational/protractor-config/' + configName + params;
   }
   console.info('Running command ' + command);
   try {
@@ -917,6 +918,39 @@ describe("Screenshoter running under protractor", function() {
   describe("bug #55", function() {
     it("should run without errors", function() {
       expect(runProtractorWithConfig('bug55.js')).toBeTruthy();
+    });
+  });
+
+  describe("Suite(s) configuration ", function() {
+
+    it("should fail if the console-error suite is specified in 'suites'", function() {
+      runProtractorWithConfig('suitesConsoleErrors.js', '--suite console');
+
+      fs.readFile('.tmp/suitesConsoleErrors/report.js', 'utf8', function(err, data) {
+        if (err) {
+          return done.fail(err);
+        }
+        expect(data).toContain("angular.module('reporter').constant('data'");
+        
+        var report = getReportAsJson(data);
+        expect(report.tests[0].failedExpectations.length).toBe(1); //Console-error
+        expect(report.tests[1].failedExpectations.length).toBe(1); //Console-error
+      });
+    });
+
+    it("should pass if the console-error suite is not specified in 'suites'", function() {
+      runProtractorWithConfig('suitesHomepage.js', '--suite console');
+      
+      fs.readFile('.tmp/suitesHomepage/report.js', 'utf8', function(err, data) {
+        if (err) {
+          return done.fail(err);
+        }
+        expect(data).toContain("angular.module('reporter').constant('data'");
+        
+        var report = getReportAsJson(data);
+        expect(report.tests[0].failedExpectations.length).toBe(0);
+        expect(report.tests[1].failedExpectations.length).toBe(0);
+      });
     });
   });
 });
