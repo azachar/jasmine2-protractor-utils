@@ -2,6 +2,58 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="0.5.0"></a>
+# [0.5.0](https://github.com/azachar/protractor-screenshoter-plugin/compare/v0.4.1...v0.5.0) (2017-12-20)
+
+
+### Bug Fixes
+
+* **plugin:** do not make screenshots for pending or skipped resutls ([7e081af](https://github.com/azachar/protractor-screenshoter-plugin/commit/7e081af)), closes [#55](https://github.com/azachar/protractor-screenshoter-plugin/issues/55)
+
+
+### Features
+
+* **report:** GitLab Support ([399b4a5](https://github.com/azachar/protractor-screenshoter-plugin/commit/399b4a5))
+
+
+
+<a name="0.4.1"></a>
+## [0.4.1](https://github.com/azachar/protractor-screenshoter-plugin/compare/v0.4.0...v0.4.1) (2017-12-20)
+
+
+### Bug Fixes
+
+* **package:** update circular-json to version 0.4.0 ([#54](https://github.com/azachar/protractor-screenshoter-plugin/issues/54)) ([cdfe56b](https://github.com/azachar/protractor-screenshoter-plugin/commit/cdfe56b))
+
+
+
+<a name="0.4.0"></a>
+# [0.4.0](https://github.com/azachar/protractor-screenshoter-plugin/compare/v0.3.2...v0.4.0) (2017-12-19)
+
+
+### Bug Fixes
+
+* **ci:** missing graphics magic in the test enviroment ([658e2d9](https://github.com/azachar/protractor-screenshoter-plugin/commit/658e2d9))
+* **package:** move image-to-ascii to optionalDependencies ([#46](https://github.com/azachar/protractor-screenshoter-plugin/issues/46)) ([27e69e9](https://github.com/azachar/protractor-screenshoter-plugin/commit/27e69e9)), closes [#42](https://github.com/azachar/protractor-screenshoter-plugin/issues/42)
+* **test:** test page wording ([0b289ea](https://github.com/azachar/protractor-screenshoter-plugin/commit/0b289ea))
+
+
+### Code Refactoring
+
+* **imageToAscii:** by default is imageToAscii turned off ([b8135e0](https://github.com/azachar/protractor-screenshoter-plugin/commit/b8135e0))
+
+
+### Features
+
+* **pause:** showing more information ([cd83d19](https://github.com/azachar/protractor-screenshoter-plugin/commit/cd83d19))
+
+
+### BREAKING CHANGES
+
+* **imageToAscii:** imageToAscii is now 'none' instead of 'failure'
+
+
+
 <a name="0.3.2"></a>
 ## [0.3.2](https://github.com/azachar/protractor-screenshoter-plugin/compare/v0.3.1...v0.3.2) (2017-01-11)
 

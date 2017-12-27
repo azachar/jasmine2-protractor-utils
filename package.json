@@ -1,12 +1,13 @@
 {
   "name": "protractor-screenshoter-plugin",
-  "version": "0.3.2",
+  "version": "0.5.0",
   "description": "A jasmine2 protractor plugin that captures for each browser instance a screenshot and browsers' console logs. The snapshot is made optionally for each expect or spec. Plugins comes with a beautiful angular based analytics tool to visually check and fix tests results.",
   "main": "index.js",
   "scripts": {
     "setup": "webdriver-manager update",
     "server": "webdriver-manager start",
-    "test": "jasmine",
+    "test": "istanbul cover node_modules/jasmine/bin/jasmine.js && istanbul report",
+    "testing": "TEST_COVERAGE_SKIP=true TEST_DEBUG=true node_modules/jasmine/bin/jasmine.js",
     "release": "standard-version"
   },
   "repository": {
@@ -40,21 +41,26 @@
   },
   "homepage": "https://github.com/azachar/protractor-screenshoter-plugin",
   "dependencies": {
-    "circular-json": "^0.3.1",
-    "fs-extra": "^1.0.0",
-    "image-to-ascii": "^3.0.5",
-    "lodash": "^4.17.3",
+    "circular-json": "^0.5.1",
+    "fs-extra": "^5.0.0",
+    "klaw-sync": "^3.0.2",
+    "lodash": "^4.17.4",
     "mkdirp": "^0.5.1",
-    "moment": "^2.18.1",
-    "q": "^1.5.0",
+    "moment": "^2.20.1",
+    "q": "^1.5.1",
     "screenshoter-report-analyzer": "^0.3.0",
-    "uuid": "^3.0.0"
+    "uuid": "^3.1.0"
   },
   "devDependencies": {
-    "cz-conventional-changelog": "^1.2.0",
-    "jasmine": "^2.5.2",
+    "codecov": "^3.0.0",
+    "cz-conventional-changelog": "^2.1.0",
+    "istanbul": "^0.4.5",
+    "jasmine": "^2.8.0",
     "protractor": "^5.x",
-    "standard-version": "^4.0.0"
+    "standard-version": "^4.2.0"
+  },
+  "optionalDependencies": {
+    "image-to-ascii": "^3.0.9"
   },
   "config": {
     "commitizen": {

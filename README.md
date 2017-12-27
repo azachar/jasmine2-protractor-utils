@@ -1,4 +1,4 @@
-[![Gitter](https://badges.gitter.im/Join Chat.svg)](https://gitter.im/protractor-screenshoter-plugin/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+[![Gitter](https://img.shields.io/gitter/room/nwjs/nw.js.svg)](https://gitter.im/protractor-screenshoter-plugin/Lobby)
 
 [![npm](https://img.shields.io/npm/dm/protractor-screenshoter-plugin.svg?style=flat-square)](https://www.npmjs.com/package/protractor-screenshoter-plugin) [![npm](https://img.shields.io/npm/dt/protractor-screenshoter-plugin.svg?style=flat-square)](https://www.npmjs.com/package/protractor-screenshoter-plugin)
 
@@ -7,19 +7,26 @@
 [![Dependency Status](https://david-dm.org/azachar/protractor-screenshoter-plugin.svg)](https://david-dm.org/azachar/protractor-screenshoter-plugin) [![devDependency Status](https://david-dm.org/azachar/protractor-screenshoter-plugin/dev-status.svg)](https://david-dm.org/azachar/protractor-screenshoter-plugin#info=devDependencies)
 
 [![Build Status](https://travis-ci.org/azachar/protractor-screenshoter-plugin.svg?branch=master)](https://travis-ci.org/azachar/protractor-screenshoter-plugin)
+[![Coverage Status](https://img.shields.io/codecov/c/github/azachar/protractor-screenshoter-plugin.svg?style=flat-square)](http://codecov.io/github/azachar/protractor-screenshoter-plugin?branch=master)
+
 
 # protractor-screenshoter-plugin
 
 This plugin captures for each **expectation** or **spec** console **logs** and makes **screenshots** for **each browser** instance. Also it comes with a beautifull angular based [HTML reporter for chat alike apps](https://github.com/azachar/screenshoter-report-analyzer).
 
-1. This plugin can take screenshots for each Jasmine2 expect success/failure on _multiple-browsers instances_ at once.
-2. It can take screenshots for each spec failure/success as well
+1. This plugin can take screenshots of each Jasmine2 expect success/failure on _multiple-browsers instances_ at once.
+2. It can take screenshots of each spec failure/success as well
 3. For each expectation or spec can capture console logs for each browser instance
-4. It can generate a report analyzer - angular+bootstrap HTML reports with active filtering to easy find out why your tests are failing
+4. It can generate a report analyzer - angular+bootstrap HTML reports with active filtering to easily find out why your tests are failing
 5. HTML reports allow you to analyze your browser's console logs as well.
-6. Supports circleci.com (the report displays a build number, a branch, etc. )
+6. Supports gitlab.com CI/CD, circleci.com (the report displays a build number, a branch, etc. )
 7. Supports parallel tests execution
 8. Makes optional Ascii screenshots
+
+Additional HTML reporter features:
+
+1. domain log filter (to narrow down your test classes faster)
+2. excludes certain repetitive logs
 
 
 ## Screenshots
@@ -39,6 +46,10 @@ This plugin captures for each **expectation** or **spec** console **logs** and m
 ### Console log management
 
 ![Screenshoter reporter console](https://cdn.rawgit.com/azachar/screenshoter-report-analyzer/master/screenshots/screenshot3.png)
+
+####  Stacktrace filtering
+![Screenshoter reporter stacktrace filtering](https://cdn.rawgit.com/azachar/screenshoter-report-analyzer/master/screenshots/screenshot5.png)
+
 
 ## Motivation
 
@@ -60,16 +71,72 @@ Also, I created a list of [alternatives](https://github.com/azachar/protractor-s
 npm install protractor-screenshoter-plugin
 ```
 
-NOTE: This plugin depends on [screenshoter-report-analyzer](https://github.com/azachar/screenshoter-report-analyzer). So sometimes even if this plugin version is not updated, the reporter might be.
+**NOTE**:
+
+1. This plugin depends on [screenshoter-report-analyzer](https://github.com/azachar/screenshoter-report-analyzer). So sometimes even if this plugin version is not updated, the reporter might be.
+
+2. If you want to use the option `imageToAscii`, then you need to install additional dependencies depending on your OS. By default is this option turned off.
+```sh
+  # Ubuntu
+  sudo apt-get install graphicsmagick
+
+  # Fedora
+  sudo dnf install GraphicsMagick
+
+  # CentOS / RHEL
+  sudo yum install --enablerepo epel GraphicsMagick
+
+  # OS X
+  brew install graphicsmagick
+
+  # Windows users can install the binaries from http://www.graphicsmagick.org/
+  # ...or using the command line:
+  # Chocolatey (package manager for Windows)
+  # (Restart of cmd/PowerShell is required)
+  choco install graphicsmagick
+```
+
+  Then, install this package
+```sh
+  npm install image-to-ascii
+```
 
 # Experimental features
 
-Please always check our branches started with `feat-`. There are some new and shiny features that are working but aren't yet published. Each branch has information how to use it and install it. Once it is stable enough, it will be merged to the master branch.
+Please always check our branches started with `feat-`. There are some new and shiny features that are working but aren't yet published. Each branch has information how to use it and install it. Once it is stable enough, it will be merged into the master branch.
 Feel free to provide feedback to them.
 
 # Usage
 
 Add this plugin to the protractor config file:
+
+Example:
+
+```javascript
+exports.config = {
+    framework: 'jasmine2',
+
+    plugins: [{
+        package: 'protractor-screenshoter-plugin',
+        screenshotPath: './REPORTS/e2e',
+        screenshotOnExpect: 'failure+success',
+        screenshotOnSpec: 'none',
+        withLogs: 'true',
+        writeReportFreq: 'asap',
+        imageToAscii: 'none',
+        clearFoldersBeforeTest: true
+      }],
+
+      onPrepare: function() {
+          // returning the promise makes protractor wait for the reporter config before executing tests
+          return global.browser.getProcessedConfig().then(function(config) {
+              //it is ok to be empty
+          });
+      }
+};
+```
+
+Here is the full list of possible options, more details see below in the [config reference](#config-reference) section.
 
 ```javascript
 exports.config = {
@@ -83,7 +150,7 @@ exports.config = {
        writeReportFreq: {String}      (Default - 'end', 'spec', 'asap'),
        verbose: {String} (Default - 'info', 'debug'),
        pauseOn: {String}    (Default - 'never', 'failure', 'spec'),
-       imageToAscii: {String}    (Default - 'failure+success', 'failure', 'none'),
+       imageToAscii: {String}    (Default - 'none', 'failure+success', 'failure'),
        imageToAsciiOpts:{Obbject} (Default - {bg:true})
        clearFoldersBeforeTest: {Boolean}       (Default - false),
        failTestOnErrorLog: {
@@ -101,31 +168,6 @@ exports.config = {
      };
 ```
 
-Example:
-
-```javascript
-exports.config = {
-    framework: 'jasmine2',
-
-    plugins: [{
-        package: 'protractor-screenshoter-plugin',
-        screenshotPath: './REPORTS/e2e',
-        screenshotOnExpect: 'failure+success',
-        screenshotOnSpec: 'none',
-        withLogs: 'true',
-        writeReportFreq: 'asap',
-        imageToAscii: 'failure',
-        clearFoldersBeforeTest: true
-    }],
-
-    onPrepare: function() {
-        // returning the promise makes protractor wait for the reporter config before executing tests
-        return global.browser.getProcessedConfig().then(function(config) {
-            //it is ok to be empty
-        });
-    }
-};
-```
 
 ## Single browser app
 
@@ -137,7 +179,7 @@ In order to use multi-browser chat alike testing, you need to keep a track of al
 
 You can do it like this
 
-```
+```javascript
 var a  = browser.forkNewDriverInstance();
 var b  = browser.forkNewDriverInstance();
 
@@ -153,7 +195,7 @@ delete global.screenshotBrowsers.userB;
 
 to reset screenshotBrowsers from your previous spec use this code
 
-```
+```javascript
 beforeAll(function() {
     global.screenshotBrowsers = {};
   });
@@ -243,6 +285,11 @@ Default: 'failure' Valid Options: 'failure+success'/'failure'/'none'
 
 To use this feature please follow instructions on <https://github.com/IonicaBizau/image-to-ascii/blob/master/INSTALLATION.md>
 
+and also please install the optional dependency
+```
+npm install image-to-ascii
+```
+
 ## imageToAsciiOpts
 
 Options for imageToAscii conversion, more info can be found at <https://github.com/IonicaBizau/image-to-ascii>
@@ -261,7 +308,7 @@ In order to make chrome' console works properly, you need to modify your `protra
 
 ## writeReportFreq
 
-By default, the output JSON file with tests results is written at the end of the execution of jasmine tests. However for debug process is better to get it immediately after each expectation - specify the option 'asap'. Also, there is a less usual option to write it after each test - use the option 'spec'. The recommended is to left it out for a CI server and for a local debugging use the option 'asap'.
+By default, the output JSON file with tests results is written at the end of the execution of jasmine tests. However, for debug, process is better to get it immediately after each expectation - specify the option 'asap'. Also, there is a less usual option to write it after each test - use the option 'spec'. The recommended is to left it out for a CI server and for a local debugging use the option 'asap'.
 
 Default: 'end' Valid Options: 'asap', 'spec', 'end'
 
@@ -287,13 +334,13 @@ _NOTE: This works only on chrome!_
 
 ### failTestOnErrorLogLevel
 
-Log level, test fails of the browser console log has logs **more than** this specified level.
+Log level, the test fails of the browser console log has logs **more than** this specified level.
 
 Default: 900
 
 ### excludeKeywords
 
-An array of keywords to be excluded, while searching for error logs. i.e If a log contains any of these keywords, spec/test will not be marked failed.
+An array of keywords to be excluded while searching for error logs. i.e If a log contains any of these keywords, spec/test will not be marked failed.
 
 Please do not specify this flag, if you don't supply any such keywords.
 
@@ -312,9 +359,82 @@ After cloning the project you can run tests as follows:
 3. `npm run server &`
 4. `npm test`
 
+To run without coverage report including some debug logging use  `npm run testing`
+
+
 ## Committing
 
 Please use `git-cz` to format your commit message.
+
+## Contributing
+- Your PR is more than welcome!
+- Please include always tests in your PR.
+- If you find a bug, please create a test case for it that fails first, then write your fix. If all passes on Travis, feel free to provide PR.
+
+### How to write tests for your contribution
+
+We are testing our plugin for protractor,
+
+1. so we need an e2e protractor test.
+
+  There are already some e2e tests in ``spec/integrational/protractor`` that can be reused. Basically, we run sample e2e tests against http://www.angularjs.org. So if this page is changed or inaccessible our tests will fail too :(
+
+  ***Note***: *Any PR that will create a local dummy server that our sample tests will run against is welcome :)*
+
+2. Then we need a screenshoter configuration that we will run the protractor e2e tests against. Please write your new config in
+``spec/integrational/protractor-config\bugXXX.js``
+
+3. Please always specify a unique directory for your new screenshoter config, so it doesn't interfere with the existing tests.
+
+  ```js
+  var env = require('../environment');
+
+  exports.config = {
+      seleniumAddress: env.seleniumAddress,
+      framework: 'jasmine2',
+      specs: ['../protractor/angularjs-homepage-test.js'],
+      plugins: [{
+          path: '../../../index.js',
+
+          screenshotPath: '.tmp/bugXXX',
+      }]
+  };
+  ```
+
+4. write your jasmine test (copy the whole describe block from existing one and modify it to your needs).
+
+  Mainly modify
+  ```js
+    beforeAll(function() {
+        runProtractorWithConfig('bugXXX.js');
+    });
+  ```
+
+To check results from protractor e2e tests, simply run
+
+```
+node_modules/protractor/bin/protractor spec/integrational/protractor-config/bugXXX.js
+```
+
+Then you can tweak your jasmine test to check the correct behavior of your screenshoter bugfix or feature.
+
+5. to run jasmine tests use  `npm test` after
+  1. `npm install`
+  2. `npm run setup` This will install webdriver
+  3. `npm run server &` This will run selenium server
+
+### How to debug screenshoter plugin
+
+You can debug this plugin by running protractor in a debug mode like this:
+```
+ node --inspect-brk node_modules/protractor/bin/protractor ./spec/integrational/protractor-config/default.js
+```
+**NOTE**
+  Where `./spec/integrational/protractor-config/default.js` is a sample e2e test. You can choose another one or write one yourself.
+
+Then open ``chrome://inspect`` in your Chrome and press `inspect` on the remote target.
+
+Here is more information how to debug protractor - https://github.com/angular/protractor/blob/master/docs/debugging.md
 
 ### Releasing
 
