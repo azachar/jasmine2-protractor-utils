@@ -923,7 +923,7 @@ describe("Screenshoter running under protractor", function() {
 
   describe("Suite(s) configuration ", function() {
 
-    it("should fail if the console-error suite is specified in 'suites'", function() {
+    it("should fail if the console-error suite is specified in 'suites'", function(done) {
       runProtractorWithConfig('suitesConsoleErrors.js', '--suite console');
 
       fs.readFile('.tmp/suitesConsoleErrors/report.js', 'utf8', function(err, data) {
@@ -935,10 +935,11 @@ describe("Screenshoter running under protractor", function() {
         var report = getReportAsJson(data);
         expect(report.tests[0].failedExpectations.length).toBe(1); //Console-error
         expect(report.tests[1].failedExpectations.length).toBe(1); //Console-error
+        done();
       });
     });
 
-    it("should pass if the console-error suite is not specified in 'suites'", function() {
+    it("should pass if the console-error suite is not specified in 'suites'", function(done) {
       runProtractorWithConfig('suitesHomepage.js', '--suite console');
       
       fs.readFile('.tmp/suitesHomepage/report.js', 'utf8', function(err, data) {
@@ -950,6 +951,7 @@ describe("Screenshoter running under protractor", function() {
         var report = getReportAsJson(data);
         expect(report.tests[0].failedExpectations.length).toBe(0);
         expect(report.tests[1].failedExpectations.length).toBe(0);
+        done();
       });
     });
   });
