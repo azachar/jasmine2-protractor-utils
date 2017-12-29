@@ -409,7 +409,7 @@ protractorUtil.failTestOnErrorLog = function(context) {
       /*
        * Verifies if the `suite` where tests are running is present on the `failTestOnErrorLog.suites` list
       */
-      function isAValidSuite() {
+      function isASuiteToCheck() {
         //If there are no suites defined the default value is 'ALL'
         if(!context.config.failTestOnErrorLog.suites) {
           return true;
@@ -428,7 +428,7 @@ protractorUtil.failTestOnErrorLog = function(context) {
           browserLogs.forEach(function(log) {
             var logLevel = context.config.failTestOnErrorLog.failTestOnErrorLogLevel ? context.config.failTestOnErrorLog.failTestOnErrorLogLevel : 900;
             var flag = false;
-            if ((log.level.value > logLevel) && isAValidSuite()) { // it's an error log && is a valid suite
+            if ((log.level.value > logLevel) && isASuiteToCheck()) { // it's an error log && is a valid suite
               if (context.config.failTestOnErrorLog.excludeKeywords) {
                 context.config.failTestOnErrorLog.excludeKeywords.forEach(function(keyword) {
                   if (log.message.search(keyword) > -1) {
