@@ -6,9 +6,15 @@
   "scripts": {
     "setup": "webdriver-manager update",
     "server": "webdriver-manager start",
-    "test": "istanbul cover node_modules/jasmine/bin/jasmine.js && istanbul report",
-    "testing": "TEST_COVERAGE_SKIP=true TEST_DEBUG=true node_modules/jasmine/bin/jasmine.js",
+    "test": "nyc jasmine",
+    "coverage": "nyc report --reporter=text-lcov > coverage.lcov && codecov",
+    "testing": "TEST_COVERAGE_SKIP=true TEST_DEBUG=true jasmine",
     "release": "standard-version"
+  },
+  "nyc": {
+    "include": [
+      "index.js"
+    ]
   },
   "repository": {
     "type": "git",
@@ -54,13 +60,13 @@
   "devDependencies": {
     "codecov": "^3.0.0",
     "cz-conventional-changelog": "^2.1.0",
-    "istanbul": "^0.4.5",
     "jasmine": "^2.8.0",
+    "nyc": "^11.4.1",
     "protractor": "^5.x",
     "standard-version": "^4.2.0"
   },
   "optionalDependencies": {
-    "image-to-ascii": "^3.0.9"
+    "image-to-ascii": "^3.0.11"
   },
   "config": {
     "commitizen": {

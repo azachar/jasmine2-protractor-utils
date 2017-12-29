@@ -17,7 +17,7 @@ before_script:
   - nohup bash -c "npm run server &> selenium-server.log &"
   - sleep 10
 after_success:
-  - bash <(curl -s https://codecov.io/bash)
+  - npm run coverage
 deploy:
   provider: npm
   email: andrej@chocolatejar.eu

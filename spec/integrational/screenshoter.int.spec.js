@@ -5,11 +5,9 @@ var fs = require('fs-extra');
 var cp = require('child_process');
 
 function runProtractorWithConfig(configName, params) {
-  var command;
+  var command = 'node_modules/protractor/bin/protractor ./spec/integrational/protractor-config/' + configName;
   if (env.coverage) {
-    command = 'istanbul cover --print none --report lcovonly --dir coverage/' + configName + ' | node_modules/protractor/bin/protractor ./spec/integrational/protractor-config/' + configName;
-  } else {
-    command = 'node_modules/protractor/bin/protractor ./spec/integrational/protractor-config/' + configName;
+    command = 'nyc --reporter lcov ' + command;
   }
 
   params = params ? ' ' + params : '';
