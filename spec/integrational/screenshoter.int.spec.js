@@ -6,12 +6,15 @@ var cp = require('child_process');
 
 function runProtractorWithConfig(configName, params) {
   var command;
-  params = params ? ' ' + params : '';
   if (env.coverage) {
-    command = 'istanbul cover --print none --report lcovonly --dir coverage/' + configName + ' node_modules/protractor/bin/protractor ./spec/integrational/protractor-config/' + configName + params;
+    command = 'istanbul cover --print none --report lcovonly --dir coverage/' + configName + ' | node_modules/protractor/bin/protractor ./spec/integrational/protractor-config/' + configName;
   } else {
-    command = 'node_modules/protractor/bin/protractor ./spec/integrational/protractor-config/' + configName + params;
+    command = 'node_modules/protractor/bin/protractor ./spec/integrational/protractor-config/' + configName;
   }
+
+  params = params ? ' ' + params : '';
+  command += params;
+
   console.info('Running command ' + command);
   try {
     cp.execSync(command, {
@@ -921,10 +924,10 @@ describe("Screenshoter running under protractor", function() {
     });
   });
 
-  describe("Suite(s) configuration ", function() {
+  describe("suitesConsoleErrors", function() {
 
     it("should fail if the console-error suite is specified in 'suites'", function(done) {
-      runProtractorWithConfig('suitesConsoleErrors.js', '--suite console');
+      runProtractorWithConfig('suitesConsoleErrors.js', '--suite=\"console\"');
 
       fs.readFile('.tmp/suitesConsoleErrors/report.js', 'utf8', function(err, data) {
         if (err) {
@@ -938,9 +941,12 @@ describe("Screenshoter running under protractor", function() {
         done();
       });
     });
+  });
 
+  describe("suitesHomepage", function() {
+      
     it("should pass if the console-error suite is not specified in 'suites'", function(done) {
-      runProtractorWithConfig('suitesHomepage.js', '--suite console');
+      runProtractorWithConfig('suitesHomepage.js', '--suite=console');
       
       fs.readFile('.tmp/suitesHomepage/report.js', 'utf8', function(err, data) {
         if (err) {
