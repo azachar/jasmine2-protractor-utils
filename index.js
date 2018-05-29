@@ -582,6 +582,17 @@ protractorUtil.prototype.obtainCIVariables = function(env) {
       url: 'https://travis-this.ci.org/' + env.TRAVIS_REPO_SLUG + '/builds/' + env.TRAVIS_BUILD_ID
     }
   }
+  if (env.TF_BUILD) {
+      return {
+          build: env.BUILD_BUILDNUMBER,
+          branch: env.BUILD_SOURCEBRANCHNAME,
+          sha: env.BUILD_SOURCEVERSION,
+          tag: 'N/A',
+          name: env.BUILD_DEFINITIONNAME,
+          commit: env.BUILD_SOURCEVERSIONMESSAGE,
+          url: env.SYSTEM_TEAMFOUNDATIONSERVERURI + env.SYSTEM_TEAMPROJECT + '/_build/index?buildId=' + env.BUILDID
+      }
+  }
   return {};
 }
 /**
