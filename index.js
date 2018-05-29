@@ -590,7 +590,7 @@ protractorUtil.prototype.obtainCIVariables = function(env) {
           tag: 'N/A',
           name: env.BUILD_DEFINITIONNAME,
           commit: env.BUILD_SOURCEVERSIONMESSAGE,
-          url: env.SYSTEM_TEAMFOUNDATIONSERVERURI + env.SYSTEM_TEAMPROJECT + '/_build/index?buildId=' + env.BUILDID
+          url: env.SYSTEM_TEAMFOUNDATIONSERVERURI + env.SYSTEM_TEAMPROJECT + '/_build/index?buildId=' + env.BUILD_BUILDID
       }
   }
   return {};
