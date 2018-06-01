@@ -1523,7 +1523,6 @@ describe("Screenshoter running under protractor", function() {
         done();
       });
     });
-    
   });
   
   describe("tfs ci variables on report", function() {
@@ -1548,7 +1547,6 @@ describe("Screenshoter running under protractor", function() {
         expect(report.ci.commit).toBe('commit');
         expect(report.ci.url).toBeDefined();
     });
- 
   });
   
 });
