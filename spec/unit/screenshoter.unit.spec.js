@@ -224,6 +224,30 @@ describe("Screenshoter unit", function() {
       expect(ci.commit).toEqual('commit');
       expect(ci.url).toEqual('https://circleci.com/some/ulr');
     });
+    
+    it("should support TFS", function() {
+      var env = {
+        TF_BUILD: true,
+        BUILD_BUILDNUMBER: '1.0.1234',
+        BUILD_SOURCEBRANCHNAME: 'master',
+        BUILD_SOURCEVERSION: 'sha',
+        // No variable for 'tag', will display 'N/A'
+        BUILD_DEFINITIONNAME: 'a/b',
+        BUILD_SOURCEVERSIONMESSAGE: 'commit',
+        SYSTEM_TEAMFOUNDATIONSERVERURI: 'https://www.visualstudio.com/tfs/'
+      }
+      var ci = screenshoter.obtainCIVariables(env);
+
+      expect(ci).toBeDefined();
+      expect(ci.build).toEqual('1.0.1234');
+      expect(ci.tag).toEqual('N/A'); // hard coded
+      expect(ci.sha).toEqual('sha');
+      expect(ci.branch).toEqual('master');
+      expect(ci.name).toEqual('a/b');
+      expect(ci.commit).toEqual('commit');
+      expect(ci.url).toEqual('https://www.visualstudio.com/tfs/');
+    });
+
 
     it("should support Local environment", function() {
       var env = {}
