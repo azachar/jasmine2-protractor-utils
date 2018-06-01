@@ -1523,6 +1523,32 @@ describe("Screenshoter running under protractor", function() {
         done();
       });
     });
-
+    
   });
+  
+  describe("tfs ci variables on report", function() {
+    beforeAll(function() {
+      runProtractorWithConfig('ci-variables-tfs.js');
+    });
+    
+    it("should generate report.js with tfs ci variables", function(done) {
+      fs.readFile('./tmp/ci-variables-tfs/report.js', 'utf8', function(err, data) {
+        if (err) {
+          return done.fail(err);
+        }
+        expect(data).toContain("angular.module('reporter').constant('data'");
+
+        var report = getReportAsJson(data);
+        expect(report.ci).toBeDefined();
+        expect(report.ci.build).toBe('1.0.286408');
+        expect(report.ci.tag).toEqual(['tag1', 'tag2']);
+        expect(report.ci.sha).toBe('sha');
+        expect(report.ci.branch).toBe('master');
+        expect(report.ci.name).toBe('a/b');
+        expect(report.ci.commit).toBe('commit');
+        expect(report.ci.url).toBeDefined();
+    });
+ 
+  });
+  
 });
