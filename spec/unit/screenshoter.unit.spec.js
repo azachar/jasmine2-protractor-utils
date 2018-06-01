@@ -232,7 +232,7 @@ describe("Screenshoter unit", function() {
         BUILD_BUILDID: '1234',
         BUILD_SOURCEBRANCHNAME: 'master',
         BUILD_SOURCEVERSION: 'sha',
-        BUILD_TAGS: ['tag1', 'tag2']
+        BUILD_TAGS: ['tag1', 'tag2'],
         BUILD_DEFINITIONNAME: 'a/b',
         BUILD_SOURCEVERSIONMESSAGE: 'commit',
         SYSTEM_TEAMFOUNDATIONSERVERURI: 'https://www.visualstudio.com/tfs/',
