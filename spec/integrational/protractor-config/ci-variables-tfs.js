@@ -7,8 +7,7 @@ exports.config = {
   plugins: [{
     path: '../../../index.js',
     screenshotPath: '.tmp/ci-variables-tfs',
-    writeReportFreq: 'asap',
-    clearFoldersBeforeTest: true
+    writeReportFreq: 'asap'
   }],
   capabilities: {
     'browserName': env.capabilities.browserName
