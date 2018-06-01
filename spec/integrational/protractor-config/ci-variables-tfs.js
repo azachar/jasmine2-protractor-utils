@@ -7,11 +7,10 @@ exports.config = {
   plugins: [{
     path: '../../../index.js',
     screenshotPath: '.tmp/ci-variables-tfs',
-    writeReportFreq: 'asap'
+    writeReportFreq: 'asap',
+    clearFoldersBeforeTest: true
   }],
   capabilities: {
-    'browserName': env.capabilities.browserName,
-    'shardTestFiles': true,
-    'maxInstances': 5
+    'browserName': env.capabilities.browserName
   }
 };
