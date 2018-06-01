@@ -232,7 +232,7 @@ describe("Screenshoter unit", function() {
         BUILD_BUILDID: '1234',
         BUILD_SOURCEBRANCHNAME: 'master',
         BUILD_SOURCEVERSION: 'sha',
-        // No variable for 'tag', will display 'N/A'
+        BUILD_TAGS: ['tag1', 'tag2']
         BUILD_DEFINITIONNAME: 'a/b',
         BUILD_SOURCEVERSIONMESSAGE: 'commit',
         SYSTEM_TEAMFOUNDATIONSERVERURI: 'https://www.visualstudio.com/tfs/',
@@ -242,7 +242,7 @@ describe("Screenshoter unit", function() {
 
       expect(ci).toBeDefined();
       expect(ci.build).toEqual('1.0.1234');
-      expect(ci.tag).toEqual('N/A'); // hard coded
+      expect(ci.tag).toEqual(['tag1', 'tag2']);
       expect(ci.sha).toEqual('sha');
       expect(ci.branch).toEqual('master');
       expect(ci.name).toEqual('a/b');
