@@ -9,4 +9,4 @@ process.env["SYSTEM_TEAMFOUNDATIONSERVERURI"] = 'http://tfsServer:8080/tfs/Colle
 process.env["SYSTEM_TEAMPROJECT"]             = 'MyProjectName';
 process.env["BUILD_TAGS"]                     = ["tag1, tag2"];
 
-require("../angularjs-homepage-simple-failure-test.js");
+require("./angularjs-homepage-simple-failure-test.js");
