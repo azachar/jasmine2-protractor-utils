@@ -229,12 +229,14 @@ describe("Screenshoter unit", function() {
       var env = {
         TF_BUILD: true,
         BUILD_BUILDNUMBER: '1.0.1234',
+        BUILD_BUILDID: '1234',
         BUILD_SOURCEBRANCHNAME: 'master',
         BUILD_SOURCEVERSION: 'sha',
         // No variable for 'tag', will display 'N/A'
         BUILD_DEFINITIONNAME: 'a/b',
         BUILD_SOURCEVERSIONMESSAGE: 'commit',
-        SYSTEM_TEAMFOUNDATIONSERVERURI: 'https://www.visualstudio.com/tfs/'
+        SYSTEM_TEAMFOUNDATIONSERVERURI: 'https://www.visualstudio.com/tfs/',
+        SYSTEM_TEAMPROJECT: 'ProjectName'
       }
       var ci = screenshoter.obtainCIVariables(env);
 
@@ -245,7 +247,7 @@ describe("Screenshoter unit", function() {
       expect(ci.branch).toEqual('master');
       expect(ci.name).toEqual('a/b');
       expect(ci.commit).toEqual('commit');
-      expect(ci.url).toEqual('https://www.visualstudio.com/tfs/');
+      expect(ci.url).toEqual('https://www.visualstudio.com/tfs/ProjectName/_build/index?buildId=1234');
     });
 
 
