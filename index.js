@@ -587,7 +587,7 @@ protractorUtil.prototype.obtainCIVariables = function(env) {
           build: env.BUILD_BUILDNUMBER,
           branch: env.BUILD_SOURCEBRANCHNAME,
           sha: env.BUILD_SOURCEVERSION,
-          tag: 'N/A',
+          tag: env.BUILD_Tag? env.BUILD_Tag : 'N/A',
           name: env.BUILD_DEFINITIONNAME,
           commit: env.BUILD_SOURCEVERSIONMESSAGE,
           url: env.SYSTEM_TEAMFOUNDATIONSERVERURI + env.SYSTEM_TEAMPROJECT + '/_build/index?buildId=' + env.BUILD_BUILDID
