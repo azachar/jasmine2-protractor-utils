@@ -1330,7 +1330,6 @@ describe("Screenshoter running under protractor", function() {
         done();
       });
     });
-
   });
 
   describe("pause on spec", function() {
@@ -1359,7 +1358,6 @@ describe("Screenshoter running under protractor", function() {
         done();
       });
     });
-
   });
 
   describe("suitesConsoleErrors", function() {
@@ -1546,6 +1544,7 @@ describe("Screenshoter running under protractor", function() {
         expect(report.ci.name).toBe('a/b');
         expect(report.ci.commit).toBe('commit');
         expect(report.ci.url).toBeDefined();
+      });
     });
   });
   
