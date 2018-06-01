@@ -27,7 +27,7 @@
 3. For each **expectation** or spec can capture console logs for **each browser instance**
 4. It can generate a report analyzer - angular+bootstrap **HTML reports** with active filtering to easily find out why your tests are failing
 5. HTML reports allow you to analyze your browser's **console logs** as well.
-6. Supports extracting build information (the report displays a build number, a branch, etc. ) for [GitLab](https://gitlab.com) **CI/CD**, [CircleCI](https://circleci.com) and [Travis](https://travis-ci.org/).
+6. Supports extracting build information (the report displays a build number, a branch, etc. ) for [GitLab](https://gitlab.com) **CI/CD**, [CircleCI](https://circleci.com), [Travis](https://travis-ci.org/) and [TFS](https://www.visualstudio.com/tfs/).
 7. Supports parallel tests execution
 8. Makes optional **Ascii** screenshots
 9. **Multi capabilities** are supported
@@ -272,7 +272,7 @@ If there is a failure (based on the config) it creates also an ASCII image into 
 
 ## Environmental variables
 
-Screenshoter out-of-box obtains build information. However, some CI does not have an environmental variable for a commit message. Thus you need to obtain it manually:
+Screenshoter out-of-box obtains build information. However, some CI does not have an environmental variable for a commit message or tags. Thus you need to obtain it manually:
 
 **GitLab**
 ```sh
@@ -282,6 +282,12 @@ Screenshoter out-of-box obtains build information. However, some CI does not hav
 **CircleCI**
 ```sh
    export CIRCLE_MSG=$(git log -1 --pretty=%B)
+```
+
+**TFS**
+(To obtain tags, please use [TFS Rest API](https://docs.microsoft.com/en-us/rest/api/vsts/build/tags/get%20build%20tags?view=vsts-rest-4.1).)
+```sh
+   process.env["BUILD_TAG"] = TFS REST API RESPONSE; 
 ```
 
 If CI will support one day these variables, you won't need to enter anything in your build process.
