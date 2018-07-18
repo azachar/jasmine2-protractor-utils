@@ -615,7 +615,8 @@ protractorUtil.prototype.setup = function() {
     },
     dump: null,
     htmlReport: true,
-    writeReportFreq: 'end'
+    writeReportFreq: 'end',
+    addPrefixToTests: false
   }
 
   this.ci = this.obtainCIVariables(process.env);
