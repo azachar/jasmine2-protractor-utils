@@ -453,7 +453,7 @@ protractorUtil.registerJasmineReporter = function(context) {
       //Add defined name to the test.description as a prefix
       global.browser.getProcessedConfig().then(function(config) {
         var name = config.capabilities.name;
-        if(name) {
+        if(name && context.config.addPrefixToTests) {
           result.description = '[' + name + '] ' + result.description;
         }
   
