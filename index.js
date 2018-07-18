@@ -449,28 +449,36 @@ protractorUtil.registerJasmineReporter = function(context) {
     specDone: function(result) {
       protractorUtil.takeOnSpecDone(result, context, protractorUtil.test); //exec async operation
 
-      //calculate total fails, success and so on
-      if (!protractorUtil.stat[result.status]) {
-        protractorUtil.stat[result.status] = 0;
-      }
-      protractorUtil.stat[result.status]++;
-      //calculate diff
-      protractorUtil.test.end = moment();
-      protractorUtil.test.diff = protractorUtil.test.end.diff(protractorUtil.test.start, 'ms');
-      protractorUtil.test.timeout = jasmine.DEFAULT_TIMEOUT_INTERVAL;
-
-      _.merge(protractorUtil.test, result);
-      if (context.config.writeReportFreq === 'asap' || context.config.writeReportFreq === 'spec') {
-        protractorUtil.writeReport(context, protractorUtil.newLongRunningOperationCounter());
-      }
-
-      var passed = result.failedExpectations.length === 0;
-      if (!passed && context.config.pauseOn === 'spec') {
-        protractorUtil.logInfo('Pause browser because of a spec failed  - %s', result.name);
-        protractorUtil.logDebug(result.failedExpectations[0].message);
-        protractorUtil.logDebug(result.failedExpectations[0].stack);
-        global.browser.pause();
-      }
+      //Add defined name to the test.description as a prefix
+      global.browser.getProcessedConfig().then(function(config) {
+        var name = config.capabilities.name;
+        if(name) {
+          result.description = '[' + name + '] ' + result.description;
+        }
+  
+        //calculate total fails, success and so on
+        if (!protractorUtil.stat[result.status]) {
+          protractorUtil.stat[result.status] = 0;
+        }
+        protractorUtil.stat[result.status]++;
+        //calculate diff
+        protractorUtil.test.end = moment();
+        protractorUtil.test.diff = protractorUtil.test.end.diff(protractorUtil.test.start, 'ms');
+        protractorUtil.test.timeout = jasmine.DEFAULT_TIMEOUT_INTERVAL;
+  
+        _.merge(protractorUtil.test, result);
+        if (context.config.writeReportFreq === 'asap' || context.config.writeReportFreq === 'spec') {
+          protractorUtil.writeReport(context, protractorUtil.newLongRunningOperationCounter());
+        }
+  
+        var passed = result.failedExpectations.length === 0;
+        if (!passed && context.config.pauseOn === 'spec') {
+          protractorUtil.logInfo('Pause browser because of a spec failed  - %s', result.name);
+          protractorUtil.logDebug(result.failedExpectations[0].message);
+          protractorUtil.logDebug(result.failedExpectations[0].stack);
+          global.browser.pause();
+        }
+      });
     }
   });
 };
