@@ -1,0 +1,31 @@
+Hi there!
+
+Thanks for submitting an issue to Protractor Screenshoter Plugin.
+
+To help us help you better, please do the following before submitting an issue:
+
+1. Make sure you are not asking a usage or debugging question. If you are, use [StackOverflow](https://stackoverflow.com/search?q=protractor-screenshoter-plugin), or [Gitter](https://gitter.im/protractor-screenshoter-plugin/Lobby) to get help.
+2. Provide a minimally reduced test case. This makes it much more likely that your bug will be fixed.
+   Please follow [CONTRIBUTING.md](https://github.com/azachar/protractor-screenshoter-plugin/blob/master/CONTRIBUTING.md#bug-fixing).
+3. Fill in the information that corresponds to your type of issue below.
+4. Delete this intro and any unrelated text :smile: (if you do not we'll assume you haven't read these instructions and automatically close the issue.)
+
+
+Bug report
+---
+
+- Your protractor configuration file
+- Protractor Version: ``
+- Browser(s): ``
+- Node Version: ``
+- Angular Version: ``
+- Operating System and Version ``
+- A relevant example test
+- Output from running the test
+- Steps to reproduce the bug
+
+Feature Request
+---
+
+- Reasons for adopting new feature
+- Is this a breaking change? (How will this affect existing functionality)

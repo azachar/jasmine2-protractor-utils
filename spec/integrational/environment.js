@@ -1,5 +1,3 @@
-var path = require('path');
-
 module.exports = {
   // The address of a running selenium server.
   seleniumAddress:
@@ -14,5 +12,5 @@ module.exports = {
   },
 
   debug: (process.env.TEST_DEBUG || false),
-  coverage: !process.env.TEST_COVERAGE_SKIP,
+  coverage: !process.env.TEST_COVERAGE_SKIP
 };

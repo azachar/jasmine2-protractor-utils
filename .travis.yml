@@ -18,6 +18,7 @@ before_script:
   - sleep 10
 after_success:
   - npm run coverage
+  - npm run lint
 deploy:
   provider: npm
   email: andrej@chocolatejar.eu

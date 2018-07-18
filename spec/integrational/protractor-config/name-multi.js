@@ -6,11 +6,12 @@ exports.config = {
   specs: ['../protractor/angularjs-homepage-test.js'],
   plugins: [{
     path: '../../../index.js',
-    screenshotPath: '.tmp/bug4',
-    screenshotOnExpect: 'failure+success',
-    screenshotOnSpec: 'failure',
-    writeReportFreq: 'spec',
-    clearFoldersBeforeTest: true,
-    withLogs: true
+    screenshotPath: '.tmp/name-multi',
+    withLogs: false
+  }],
+  multiCapabilities: [{
+    'browserName': 'firefox'
+  }, {
+    'browserName': 'chrome'
   }]
 };

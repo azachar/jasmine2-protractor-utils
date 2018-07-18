@@ -76,6 +76,11 @@ describe("Screenshoter unit", function() {
       withLogs: true,
       screenshotOnExpect: 'failure+success',
       screenshotOnSpec: 'failure+success',
+      htmlOnExpect: 'failure',
+      htmlOnSpec: 'failure',
+      dump: null,
+      dumpOnExpect: 'failure',
+      dumpOnSpec: 'none',
       pauseOn: 'never',
       verbose: 'info',
       imageToAscii: 'none',
@@ -100,6 +105,11 @@ describe("Screenshoter unit", function() {
       withLogs: true,
       screenshotOnExpect: 'failure+success',
       screenshotOnSpec: 'failure+success',
+      htmlOnExpect: 'failure',
+      htmlOnSpec: 'failure',
+      dump: null,
+      dumpOnExpect: 'failure',
+      dumpOnSpec: 'none',
       pauseOn: 'never',
       verbose: 'info',
       imageToAscii: 'none',
@@ -127,6 +137,11 @@ describe("Screenshoter unit", function() {
       withLogs: true,
       screenshotOnExpect: 'failure+success',
       screenshotOnSpec: 'failure',
+      htmlOnExpect: 'failure',
+      htmlOnSpec: 'failure',
+      dump: null,
+      dumpOnExpect: 'failure',
+      dumpOnSpec: 'none',
       imageToAscii: 'none',
       pauseOn: 'never',
       verbose: 'info',
@@ -139,5 +154,89 @@ describe("Screenshoter unit", function() {
     });
   });
 
+  describe('obtainCIVariables', function() {
+    it("should support GITLAB_CI", function() {
+      var env = {
+        GITLAB_CI: true,
+        CI_JOB_ID: '1234',
+        CI_COMMIT_REF_NAME: 'branch',
+        CI_COMMIT_SHA: 'sha',
+        CI_COMMIT_TAG: 'tag',
+        CI_PROJECT_PATH: 'a/b',
+        CI_COMMIT_MSG: 'commit',
+        CI_PROJECT_URL: 'https://gitlab.com/a/b'
+      }
+      var ci = screenshoter.obtainCIVariables(env);
 
+      expect(ci).toBeDefined();
+      expect(ci.build).toEqual('1234');
+      expect(ci.tag).toEqual('tag');
+      expect(ci.sha).toEqual('sha');
+      expect(ci.branch).toEqual('branch');
+      expect(ci.name).toEqual('a/b');
+      expect(ci.commit).toEqual('commit');
+      expect(ci.url).toEqual('https://gitlab.com/a/b/-/jobs/1234');
+    });
+
+    it("should support TRAVIS", function() {
+      var env = {
+        TRAVIS: true,
+        TRAVIS_BUILD_ID: '1234',
+        TRAVIS_JOB_NUMBER: '1',
+        TRAVIS_BRANCH: 'branch',
+        TRAVIS_COMMIT: 'sha',
+        TRAVIS_TAG: 'tag',
+        TRAVIS_REPO_SLUG: 'a/b',
+        TRAVIS_COMMIT_MESSAGE: 'commit',
+        CI_PROJECT_URL: 'https://gitlab.com/a/b'
+      }
+      var ci = screenshoter.obtainCIVariables(env);
+
+      expect(ci).toBeDefined();
+      expect(ci.build).toEqual('1');
+      expect(ci.tag).toEqual('tag');
+      expect(ci.sha).toEqual('sha');
+      expect(ci.branch).toEqual('branch');
+      expect(ci.name).toEqual('a/b');
+      expect(ci.commit).toEqual('commit');
+      expect(ci.url).toEqual('https://travis-this.ci.org/a/b/builds/1234');
+    });
+
+    it("should support CIRCLECI", function() {
+      var env = {
+        CIRCLECI: true,
+        CIRCLE_BUILD_NUM: '1234',
+        CIRCLE_BRANCH: 'branch',
+        CIRCLE_SHA1: 'sha',
+        CIRCLE_TAG: 'tag',
+        CIRCLE_PROJECT_REPONAME: 'a/b',
+        CIRCLE_MSG: 'commit',
+        CIRCLE_BUILD_URL: 'https://circleci.com/some/ulr'
+      }
+      var ci = screenshoter.obtainCIVariables(env);
+
+      expect(ci).toBeDefined();
+      expect(ci.build).toEqual('1234');
+      expect(ci.tag).toEqual('tag');
+      expect(ci.sha).toEqual('sha');
+      expect(ci.branch).toEqual('branch');
+      expect(ci.name).toEqual('a/b');
+      expect(ci.commit).toEqual('commit');
+      expect(ci.url).toEqual('https://circleci.com/some/ulr');
+    });
+
+    it("should support Local environment", function() {
+      var env = {}
+      var ci = screenshoter.obtainCIVariables(env);
+
+      expect(ci).toBeDefined();
+      expect(ci.build).toBeUndefined();
+      expect(ci.tag).toBeUndefined();
+      expect(ci.sha).toBeUndefined();
+      expect(ci.branch).toBeUndefined();
+      expect(ci.name).toBeUndefined();
+      expect(ci.commit).toBeUndefined();
+      expect(ci.url).toBeUndefined();
+    });
+  });
 });

@@ -10,7 +10,7 @@ exports.config = {
     screenshotPath: '.tmp/bug55',
     screenshotOnExpect: 'failure+success',
     screenshotOnSpec: 'failure+success',
-    withLogs: 'true',
+    withLogs: true,
     writeReportFreq: 'asap',
     clearFoldersBeforeTest: true
   }]

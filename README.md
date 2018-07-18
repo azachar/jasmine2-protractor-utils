@@ -1,10 +1,12 @@
 [![Gitter](https://img.shields.io/gitter/room/nwjs/nw.js.svg)](https://gitter.im/protractor-screenshoter-plugin/Lobby)
+[![Open Source Helpers](https://www.codetriage.com/azachar/protractor-screenshoter-plugin/badges/users.svg)](https://www.codetriage.com/azachar/protractor-screenshoter-plugin)
 
 [![npm](https://img.shields.io/npm/dm/protractor-screenshoter-plugin.svg?style=flat-square)](https://www.npmjs.com/package/protractor-screenshoter-plugin) [![npm](https://img.shields.io/npm/dt/protractor-screenshoter-plugin.svg?style=flat-square)](https://www.npmjs.com/package/protractor-screenshoter-plugin)
 
 [![npm](https://img.shields.io/npm/v/protractor-screenshoter-plugin.svg?style=flat-square)](https://www.npmjs.com/package/protractor-screenshoter-plugin) [![npm](https://img.shields.io/npm/l/protractor-screenshoter-plugin.svg?style=flat-square)](https://www.npmjs.com/package/protractor-screenshoter-plugin) [![Semver](http://img.shields.io/SemVer/2.0.0.png)](http://semver.org/spec/v2.0.0.html) [![Commitizen friendly](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg)](http://commitizen.github.io/cz-cli/)
 
 [![Dependency Status](https://david-dm.org/azachar/protractor-screenshoter-plugin.svg)](https://david-dm.org/azachar/protractor-screenshoter-plugin) [![devDependency Status](https://david-dm.org/azachar/protractor-screenshoter-plugin/dev-status.svg)](https://david-dm.org/azachar/protractor-screenshoter-plugin#info=devDependencies)
+[![Known Vulnerabilities](https://snyk.io/package/npm/protractor-screenshoter-plugin/badge.svg)](https://snyk.io/package/npm/protractor-screenshoter-plugin)
 
 [![Build Status](https://travis-ci.org/azachar/protractor-screenshoter-plugin.svg?branch=master)](https://travis-ci.org/azachar/protractor-screenshoter-plugin)
 [![Coverage Status](https://img.shields.io/codecov/c/github/azachar/protractor-screenshoter-plugin.svg?style=flat-square)](http://codecov.io/github/azachar/protractor-screenshoter-plugin?branch=master)
@@ -12,22 +14,32 @@
 
 # protractor-screenshoter-plugin
 
-This plugin captures for each **expectation** or **spec** console **logs** and makes **screenshots** for **each browser** instance. Also it comes with a beautifull angular based [HTML reporter for chat alike apps](https://github.com/azachar/screenshoter-report-analyzer).
+**It captures screenshots, console logs, raw HTMLs and DB dumps in your e2e protractor tests out-of-box.**
 
-1. This plugin can take screenshots of each Jasmine2 expect success/failure on _multiple-browsers instances_ at once.
-2. It can take screenshots of each spec failure/success as well
-3. For each expectation or spec can capture console logs for each browser instance
-4. It can generate a report analyzer - angular+bootstrap HTML reports with active filtering to easily find out why your tests are failing
-5. HTML reports allow you to analyze your browser's console logs as well.
-6. Supports gitlab.com CI/CD, circleci.com (the report displays a build number, a branch, etc. )
+**All is then visualized in a beautiful [HTML5 report analyzer](https://github.com/azachar/screenshoter-report-analyzer).**
+
+**We support multi capabilities and multi browsers instances, too.**
+
+## Features
+
+1. This plugin can take screenshots of each **Jasmine2** expect **success/failure** on _multiple-browsers instances_ at once.
+2. It can take **screenshots** of each **spec** failure/success as well
+3. For each **expectation** or spec can capture console logs for **each browser instance**
+4. It can generate a report analyzer - angular+bootstrap **HTML reports** with active filtering to easily find out why your tests are failing
+5. HTML reports allow you to analyze your browser's **console logs** as well.
+6. Supports extracting build information (the report displays a build number, a branch, etc. ) for [GitLab](https://gitlab.com) **CI/CD**, [CircleCI](https://circleci.com) and [Travis](https://travis-ci.org/).
 7. Supports parallel tests execution
-8. Makes optional Ascii screenshots
+8. Makes optional **Ascii** screenshots
+9. **Multi capabilities** are supported
+10. For each expectation or spec can capture **raw HTML** for each browser instance
+11. For each expectation or spec can obtain a **DB dump** via a function returning ``callback(err, dumpAsString)``
+
 
 Additional HTML reporter features:
 
 1. domain log filter (to narrow down your test classes faster)
 2. excludes certain repetitive logs
-
+3. opens for each screenshot its rendered HTML code
 
 ## Screenshots
 
@@ -67,9 +79,26 @@ Also, I created a list of [alternatives](https://github.com/azachar/protractor-s
 
 # How to install
 
+If your protractor is installed locally, then
+
 ```
 npm install protractor-screenshoter-plugin
 ```
+
+If your protractor is installed globally, then
+```
+npm install --global protractor-screenshoter-plugin
+```
+
+or install this plugin locally, but then you must specify the plugin's path like this:
+
+```
+    plugins: [{
+        package: 'node_modules/protractor-screenshoter-plugin/index.js',
+        ...
+    }],
+```
+as mentioned in #37.
 
 **NOTE**:
 
@@ -96,9 +125,9 @@ npm install protractor-screenshoter-plugin
   choco install graphicsmagick
 ```
 
-  Then, install this package
+  Then, install this optional package
 ```sh
-  npm install image-to-ascii
+  npm install image-to-ascii@3.0.11
 ```
 
 # Experimental features
@@ -121,7 +150,7 @@ exports.config = {
         screenshotPath: './REPORTS/e2e',
         screenshotOnExpect: 'failure+success',
         screenshotOnSpec: 'none',
-        withLogs: 'true',
+        withLogs: true,
         writeReportFreq: 'asap',
         imageToAscii: 'none',
         clearFoldersBeforeTest: true
@@ -144,6 +173,8 @@ exports.config = {
        package: 'protractor-screenshoter-plugin',
        screenshotOnExpect: {String}    (Default - 'failure+success', 'failure', 'none'),
        screenshotOnSpec: {String}    (Default - 'failure+success', 'failure', 'none'),
+       htmlOnExpect: {String}    (Default - 'failure', 'failure+success', 'none'),
+       htmlOnSpec: {String}    (Default - 'failure', 'failure+success', 'none'),
        withLogs: {Boolean}      (Default - true),
        htmlReport: {Boolean}      (Default - true),
        screenshotPath: {String}                (Default - '<reports/e2e>/screenshots')
@@ -159,6 +190,9 @@ exports.config = {
                 suites: {A JSON Array}
            }
        }],
+       dumpOnExpect: {String}    (Default - 'failure', 'failure+success', 'none'),
+       dumpOnSpec: {String}    (Default - 'none', 'failure+success', 'failure'),
+       dump: {Function} (Default - null),
        onPrepare: function () {
         // returning the promise makes protractor wait for the reporter config before executing tests
         return global.browser.getProcessedConfig().then(function (config) {
@@ -216,7 +250,7 @@ exports.config = {
         screenshotPath: './REPORTS/e2e',
         screenshotOnExpect: 'failure+success',
         screenshotOnSpec: 'none',
-        withLogs: 'true',
+        withLogs: true,
         writeReportFreq: 'asap',
         clearFoldersBeforeTest: true
     }],
@@ -236,37 +270,115 @@ If there is a failure (based on the config) it creates also an ASCII image into 
 
 # Config reference
 
+## Environmental variables
+
+Screenshoter out-of-box obtains build information. However, some CI does not have an environmental variable for a commit message. Thus you need to obtain it manually:
+
+**GitLab**
+```sh
+   export CI_COMMIT_MSG=$(git log -1 --pretty=%B)
+```
+
+**CircleCI**
+```sh
+   export CIRCLE_MSG=$(git log -1 --pretty=%B)
+```
+
+If CI will support one day these variables, you won't need to enter anything in your build process.
+
+Do you want to see exactly what is extracted, consult the code directly [obtainCIVariables](index.js#L551)
+
+## dump
+If set a function, allows you to run extra command that produce a dump. The dump is taken depending on value in [dumpOnSpec](#dumponspec) or [dumpOnExpect](#dumponexpect).
+
+This allows you to greater examine your failed expectation/spec from multiple perspectives,
+
+one is a screenshot (unfortunately selenium cannot make a whole page screenshot, only what is in the visible browser's window),
+
+the second is a whole page raw HTML  ( this helps to overcome limitations in seeing only screenshots)
+
+and the third could be for example a DB dump that is all nicely linked to expectations.
+
+_Note_: Implementation of the **dump function** is up to you, you provide any function that **must return a string** directly or in a `callback(err, dumpString)`.
+
+Default: `null`
+
+Valid Options: `null` / `Function`
+
+## dumpOnExpect
+
+Calls the `dump` function for each Jasmine2 expect failure or success, depending on value.
+
+Default: `'failure'`
+
+Valid Options: `'failure+success'`/`'failure'`/`'none'`
+
+## dumpOnSpec
+
+Calls the `dump` function for each Jasmine2 spec failure or success, depending on value.
+
+Default: `none`
+
+Valid Options: `'failure+success'`/`'failure'`/`'none'`
+
 ## htmlReport
 
-If set to 'false', disables HTML report generation.
+If set to `false`, disables HTML report generation.
 
 **NOTE: This tool doesn't really make sense to use without the reports.**
 
-Default: 'true' Valid Options: true/false
+Default: `true`
+
+Valid Options:
+`true`/`false`
 
 ## screenshotOnExpect
 
 Takes from each browser instance stored in global.screenshotBrowsers screenshots for each Jasmine2 expect failure or success, depending on value.
 
-Default: 'failure+success' Valid Options: 'failure+success'/'failure'/'none'
+Default: `'failure+success'`
+
+Valid Options: `'failure+success'`/`'failure'`/`'none'`
 
 ## screenshotOnSpec
 
 Takes from each browser instance stored in global.screenshotBrowsers screenshots for each Jasmine2 spec failure or success, depending on value.
 
-Default: 'failure' Valid Options: 'failure+success'/'failure'/'none'
+Default: `failure+success`
+
+Valid Options: `'failure+success'`/`'failure'`/`'none'`
+
+## htmlOnExpect
+
+Takes from each browser instance stored in global.screenshotBrowsers raw html for each Jasmine2 expect failure or success, depending on value.
+
+Default: `'failure'`
+
+Valid Options: `'failure+success'`/`'failure'`/`'none'`
+
+## htmlOnSpec
+
+Takes from each browser instance stored in global.screenshotBrowsers raw html for each Jasmine2 spec failure or success, depending on value.
+
+Default: `'failure'`
+
+Valid Options: `'failure+success'`/`'failure'`/`'none'`
 
 ## pauseOn
 
 If fails, pause browser on expectation failure or spec failure or never.
 
-Default: 'never' Valid Options: 'failure'/'spec'
+Default: `'never'`
+
+Valid Options: `'failure'`/`'spec'`
 
 ## verbose
 
 If set to ``debug`` display internal logging.
 
-Default: 'info' Valid Options: 'debug'/'info'
+Default: `'info'`
+
+Valid Options: `'debug'`/`'info'`
 
 ## imageToAscii
 
@@ -281,7 +393,9 @@ browser.skipImageToAscii = true;
 ```
 Then this browser instance will be not generated in the log file.
 
-Default: 'failure' Valid Options: 'failure+success'/'failure'/'none'
+Default: `'failure'`
+
+Valid Options: `'failure+success'`/`'failure'`/`'none'`
 
 To use this feature please follow instructions on <https://github.com/IonicaBizau/image-to-ascii/blob/master/INSTALLATION.md>
 
@@ -298,33 +412,39 @@ Default: ``{bg:true}``
 
 ## withLogs (Chrome only)
 
-If set to 'true', capture from chrome all logs after each expect or spec
+If set to `true`, capture from chrome all logs after each expect or spec
 
 _NOTE: This works only on chrome!_
 
-Default: 'true' Valid Options: true/false
+Default: `true`
+
+Valid Options: `true`/`false`
 
 In order to make chrome' console works properly, you need to modify your `protractor.conf` as follows <https://github.com/webdriverio/webdriverio/issues/491#issuecomment-95510796>
 
 ## writeReportFreq
 
-By default, the output JSON file with tests results is written at the end of the execution of jasmine tests. However, for debug, process is better to get it immediately after each expectation - specify the option 'asap'. Also, there is a less usual option to write it after each test - use the option 'spec'. The recommended is to left it out for a CI server and for a local debugging use the option 'asap'.
+By default, the output JSON file with tests results is written at the end of the execution of jasmine tests. However, for debugging, is better to get it written immediately after each expectation - specify the option 'asap'. Also, there is a less usual option to write it after each test - use the option 'spec'. The recommended is to left it out for a CI server and for a local debugging use the option 'asap'.
 
-Default: 'end' Valid Options: 'asap', 'spec', 'end'
+Default: `'end'`
+
+Valid Options: `'asap'`, `'spec'`, `'end'`
+
+_NOTE: Using option ASAP might introduce unpredictable race conditions if multiple browsers are tested at once. It happens when we automatically collect results of all particulars JSON report files into one final.
 
 ## screenshotPath
 
-The path where the final report including screenshots will be saved. If the path does not exist, will be created. e.g './reports/something/samewhere/', please take care of './' and '/' at the beginning and end.
+The path where the final report including screenshots will be saved. If the path does not exist, will be created. e.g `./reports/something/samewhere/`, please take care of `./` and `/` at the beginning and end.
 
 Please note that due to an HTML reporter sugar, the final screenshots are stored in the subfolder relative to this $screenshotPath parameter, e.g. in the folder `$screenshotPath/screenshots'`
 
-Default: 'reports/e2e'
+Default: `'reports/e2e'`
 
 ## clearFoldersBeforeTest
 
 If this flag set to true, screenshot and HTML report directories will be emptied before generating new reports and screenshots
 
-Default: false
+Default: `false`
 
 ## failTestOnErrorLog (Chrome only)
 
@@ -336,7 +456,7 @@ _NOTE: This works only on chrome!_
 
 Log level, the test fails of the browser console log has logs **more than** this specified level.
 
-Default: 900
+Default: `900`
 
 ### excludeKeywords
 
@@ -352,101 +472,4 @@ Please do not specify this flag, if you want all your tests to run through this 
 
 # Development
 
-After cloning the project you can run tests as follows:
-
-1. `npm install`
-2. `npm run setup`
-3. `npm run server &`
-4. `npm test`
-
-To run without coverage report including some debug logging use  `npm run testing`
-
-
-## Committing
-
-Please use `git-cz` to format your commit message.
-
-## Contributing
-- Your PR is more than welcome!
-- Please include always tests in your PR.
-- If you find a bug, please create a test case for it that fails first, then write your fix. If all passes on Travis, feel free to provide PR.
-
-### How to write tests for your contribution
-
-We are testing our plugin for protractor,
-
-1. so we need an e2e protractor test.
-
-  There are already some e2e tests in ``spec/integrational/protractor`` that can be reused. Basically, we run sample e2e tests against http://www.angularjs.org. So if this page is changed or inaccessible our tests will fail too :(
-
-  ***Note***: *Any PR that will create a local dummy server that our sample tests will run against is welcome :)*
-
-2. Then we need a screenshoter configuration that we will run the protractor e2e tests against. Please write your new config in
-``spec/integrational/protractor-config\bugXXX.js``
-
-3. Please always specify a unique directory for your new screenshoter config, so it doesn't interfere with the existing tests.
-
-  ```js
-  var env = require('../environment');
-
-  exports.config = {
-      seleniumAddress: env.seleniumAddress,
-      framework: 'jasmine2',
-      specs: ['../protractor/angularjs-homepage-test.js'],
-      plugins: [{
-          path: '../../../index.js',
-
-          screenshotPath: '.tmp/bugXXX',
-      }]
-  };
-  ```
-
-4. write your jasmine test (copy the whole describe block from existing one and modify it to your needs).
-
-  Mainly modify
-  ```js
-    beforeAll(function() {
-        runProtractorWithConfig('bugXXX.js');
-    });
-  ```
-
-To check results from protractor e2e tests, simply run
-
-```
-node_modules/protractor/bin/protractor spec/integrational/protractor-config/bugXXX.js
-```
-
-Then you can tweak your jasmine test to check the correct behavior of your screenshoter bugfix or feature.
-
-5. to run jasmine tests use  `npm test` after
-  1. `npm install`
-  2. `npm run setup` This will install webdriver
-  3. `npm run server &` This will run selenium server
-
-### How to debug screenshoter plugin
-
-You can debug this plugin by running protractor in a debug mode like this:
-```
- node --inspect-brk node_modules/protractor/bin/protractor ./spec/integrational/protractor-config/default.js
-```
-**NOTE**
-  Where `./spec/integrational/protractor-config/default.js` is a sample e2e test. You can choose another one or write one yourself.
-
-Then open ``chrome://inspect`` in your Chrome and press `inspect` on the remote target.
-
-Here is more information how to debug protractor - https://github.com/angular/protractor/blob/master/docs/debugging.md
-
-### Releasing
-
-To deploy a new version run commands. If all tests are passed it will be published to npm on its own.
-
-```
-npm run release
-git push --follow-tags origin master
-```
-
-## TODO
-
-- Convert to typescript based es6 npm plugin with a proper test infrastructure
-- Support Mocha framework
-- 100% Test coverage
+Please follow [CONTRIBUTING.md](https://github.com/azachar/protractor-screenshoter-plugin/blob/master/CONTRIBUTING.md).

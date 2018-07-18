@@ -2,6 +2,82 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="0.10.1"></a>
+## [0.10.1](https://github.com/azachar/protractor-screenshoter-plugin/compare/v0.10.0...v0.10.1) (2018-02-17)
+
+
+### Bug Fixes
+
+* **npm:** removed problematic optional dependency `image-to-ascii` causing install issues. ([b7a29d4](https://github.com/azachar/protractor-screenshoter-plugin/commit/b7a29d4))
+
+
+
+<a name="0.10.0"></a>
+# [0.10.0](https://github.com/azachar/protractor-screenshoter-plugin/compare/v0.9.0...v0.10.0) (2018-02-04)
+
+
+### Features
+
+* **ci:** build information for GitLab, CircleCI and Travis ([c72d87e](https://github.com/azachar/protractor-screenshoter-plugin/commit/c72d87e))
+* **reporter:** display build information ([3d9c011](https://github.com/azachar/protractor-screenshoter-plugin/commit/3d9c011))
+
+
+
+<a name="0.9.0"></a>
+# [0.9.0](https://github.com/azachar/protractor-screenshoter-plugin/compare/v0.8.1...v0.9.0) (2018-01-11)
+
+
+### Features
+
+* **dump:** attach extra content ([fc6f1a2](https://github.com/azachar/protractor-screenshoter-plugin/commit/fc6f1a2))
+
+
+
+<a name="0.8.1"></a>
+## [0.8.1](https://github.com/azachar/protractor-screenshoter-plugin/compare/v0.8.0...v0.8.1) (2018-01-09)
+
+
+### Bug Fixes
+
+* **log:** suppressed log ([dd82006](https://github.com/azachar/protractor-screenshoter-plugin/commit/dd82006))
+
+
+
+<a name="0.8.0"></a>
+# [0.8.0](https://github.com/azachar/protractor-screenshoter-plugin/compare/v0.7.0...v0.8.0) (2018-01-08)
+
+
+### Features
+
+* **plugin:** raw html snapshots ([c2354e0](https://github.com/azachar/protractor-screenshoter-plugin/commit/c2354e0))
+
+
+
+<a name="0.7.0"></a>
+# [0.7.0](https://github.com/azachar/protractor-screenshoter-plugin/compare/v0.6.0...v0.7.0) (2017-12-31)
+
+
+### Bug Fixes
+
+* **pauseOn:** the option 'spec' works again ([9fcedc2](https://github.com/azachar/protractor-screenshoter-plugin/commit/9fcedc2))
+
+
+### Features
+
+* **browser:** default name is read from capabilities / multiCapabilities ([3f2f1d3](https://github.com/azachar/protractor-screenshoter-plugin/commit/3f2f1d3)), closes [#39](https://github.com/azachar/protractor-screenshoter-plugin/issues/39)
+
+
+
+<a name="0.6.0"></a>
+# [0.6.0](https://github.com/azachar/protractor-screenshoter-plugin/compare/v0.5.0...v0.6.0) (2017-12-29)
+
+
+### Features
+
+* **failTestOnErrorLog:** Add `suites` parameter ([688a069](https://github.com/azachar/protractor-screenshoter-plugin/commit/688a069)), closes [#49](https://github.com/azachar/protractor-screenshoter-plugin/issues/49)
+
+
+
 <a name="0.5.0"></a>
 # [0.5.0](https://github.com/azachar/protractor-screenshoter-plugin/compare/v0.4.1...v0.5.0) (2017-12-20)
 
