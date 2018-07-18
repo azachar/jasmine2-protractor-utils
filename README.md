@@ -446,6 +446,12 @@ If this flag set to true, screenshot and HTML report directories will be emptied
 
 Default: `false`
 
+## addPrefixToTests
+
+If this flag is set to true, a prefix will be added to every test description with the `name` value presented on the `capabilities` object defined on the protractor configs.
+
+Default: `false`
+
 ## failTestOnErrorLog (Chrome only)
 
 Contains a set of configuration for console log. When browser console has errors of a certain log level (default:>900), the spec/test is marked failed along with log in the error report/stacktrace.

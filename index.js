@@ -34,6 +34,7 @@ try { // optional dependency, ignore if not installed
  *      writeReportFreq: {String}      (Default - 'end', 'spec', 'asap'),
  *      screenshotPath: {String}                (Default - 'reports/screenshots')
  *      clearFoldersBeforeTest: {Boolean}       (Default - false),
+ *      addPrefixToTests: {Boolean}  (Default - false),
  *      failTestOnErrorLog: {
  *               failTestOnErrorLogLevel: {Number},  (Default - 900)
  *               excludeKeywords: {A JSON Array}
