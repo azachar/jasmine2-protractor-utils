@@ -443,11 +443,12 @@ protractorUtil.registerJasmineReporter = function(context) {
           specLogs: [],
           specHtmls: [],
           failedExpectations: [],
-          passedExpectations: []
+          passedExpectations: [],
+          prefix: ''
         };
         global.browser.getProcessedConfig().then(function(config) {
           if(config.capabilities) {
-            protractorUtil.test.prefix = '[' + config.capabilities.name + ']';
+            protractorUtil.test.prefix = '[' + config.capabilities.name + '] ';
           }
           protractorUtil.testResults.push(protractorUtil.test);
         });
@@ -457,7 +458,8 @@ protractorUtil.registerJasmineReporter = function(context) {
 
       //Add defined name to the test.description as a prefix
       if(context.config.addPrefixToTests) {
-        result.description = protractorUtil.test.prefix + ' ' + result.description;
+        result.description = protractorUtil.test.prefix + result.description;
+        result.fullName = protractorUtil.test.prefix + result.fullName;
       }
 
       //calculate total fails, success and so on
