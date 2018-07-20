@@ -89,7 +89,8 @@ describe("Screenshoter unit", function() {
       },
       clearFoldersBeforeTest: true,
       htmlReport: true,
-      writeReportFreq: 'end'
+      writeReportFreq: 'end',
+      addPrefixToTests: false
     });
   });
 
@@ -119,7 +120,8 @@ describe("Screenshoter unit", function() {
       clearFoldersBeforeTest: true,
       htmlReport: true,
       writeReportFreq: 'end',
-      path: './bla/bla'
+      path: './bla/bla',
+      addPrefixToTests: false
     });
   });
 
@@ -150,7 +152,8 @@ describe("Screenshoter unit", function() {
       },
       clearFoldersBeforeTest: true,
       writeReportFreq: 'end',
-      htmlReport: true
+      htmlReport: true,
+      addPrefixToTests: false
     });
   });
 
