@@ -16,7 +16,7 @@ exports.config = {
       'chromeOptions': {
         args: ['--window-size=1400,1200']
       },
-      specs: ['../protractor/angularjs-homepage-simple-failure-test.js']
+      specs: ['../protractor/angularjs-homepage-test.js'],
     }, {
       'browserName': 'chrome',
       'name': 'M',
