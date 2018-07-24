@@ -1525,7 +1525,7 @@ describe("Screenshoter running under protractor", function() {
   });
 
   describe("when the user set the addPrefixToTests parameter", function() {
-    fit("should add the capabilities.name to the test description", function(done) {
+    it("should add the capabilities.name to the test description", function(done) {
       runProtractorWithConfig('addPrefixToTests.js');
 
       fs.readFile('.tmp/addPrefixToTests/report.js', 'utf8', function(err, data) {
@@ -1536,14 +1536,14 @@ describe("Screenshoter running under protractor", function() {
         expect(data).toContain("angular.module('reporter').constant('data'");
 
         var report = getReportAsJson(data);
-        expect(report.tests[0].description).toBe('[M] should greet the named user');
-        expect(report.tests[0].fullName).toBe('[M] angularjs homepage should greet the named user');
-        expect(report.tests[1].description).toBe('[M] should list todos');
-        expect(report.tests[1].fullName).toBe('[M] angularjs homepage todo list should list todos');
-        expect(report.tests[2].description).toBe('[M] should add a todo');
-        expect(report.tests[2].fullName).toBe('[M] angularjs homepage todo list should add a todo');
-        expect(report.tests[3].description).toBe('[L] should greet the named user');
-        expect(report.tests[3].fullName).toBe('[L] angularjs homepage should greet the named user');
+        expect(report.tests[0].description).toBe('[L] should greet the named user');
+        expect(report.tests[0].fullName).toBe('[L] angularjs homepage should greet the named user');
+        expect(report.tests[1].description).toBe('[M] should greet the named user');
+        expect(report.tests[1].fullName).toBe('[M] angularjs homepage should greet the named user');
+        expect(report.tests[2].description).toBe('[M] should list todos');
+        expect(report.tests[2].fullName).toBe('[M] angularjs homepage todo list should list todos');
+        expect(report.tests[3].description).toBe('[M] should add a todo');
+        expect(report.tests[3].fullName).toBe('[M] angularjs homepage todo list should add a todo');
         done();
       });
 
