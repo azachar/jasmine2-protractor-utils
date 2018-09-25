@@ -224,6 +224,32 @@ describe("Screenshoter unit", function() {
       expect(ci.commit).toEqual('commit');
       expect(ci.url).toEqual('https://circleci.com/some/ulr');
     });
+    
+    it("should support TFS", function() {
+      var env = {
+        TF_BUILD: true,
+        BUILD_BUILDNUMBER: '1.0.1234',
+        BUILD_BUILDID: '1234',
+        BUILD_SOURCEBRANCHNAME: 'master',
+        BUILD_SOURCEVERSION: 'sha',
+        BUILD_TAGS: ['tag1', 'tag2'],
+        BUILD_DEFINITIONNAME: 'a/b',
+        BUILD_SOURCEVERSIONMESSAGE: 'commit',
+        SYSTEM_TEAMFOUNDATIONSERVERURI: 'https://www.visualstudio.com/tfs/',
+        SYSTEM_TEAMPROJECT: 'ProjectName'
+      }
+      var ci = screenshoter.obtainCIVariables(env);
+
+      expect(ci).toBeDefined();
+      expect(ci.build).toEqual('1.0.1234');
+      expect(ci.tag).toEqual(['tag1', 'tag2']);
+      expect(ci.sha).toEqual('sha');
+      expect(ci.branch).toEqual('master');
+      expect(ci.name).toEqual('a/b');
+      expect(ci.commit).toEqual('commit');
+      expect(ci.url).toEqual('https://www.visualstudio.com/tfs/ProjectName/_build/index?buildId=1234');
+    });
+
 
     it("should support Local environment", function() {
       var env = {}
