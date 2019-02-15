@@ -65,7 +65,7 @@
     "jasmine": "^3.2.0",
     "nyc": "^13.0.1",
     "protractor": "^5.4",
-    "standard-version": "^4.2.0"
+    "standard-version": "^5.0.0"
   },
   "config": {
     "commitizen": {
