@@ -4,7 +4,6 @@ var mkdirp = require('mkdirp');
 var _ = require('lodash');
 var uuid = require('uuid');
 var moment = require('moment');
-var path = require('path');
 var CircularJSON = require('circular-json');
 var q = require('q');
 var assert = require('assert');
@@ -416,8 +415,8 @@ protractorUtil.installReporter = function(context) {
   var dest = context.config.screenshotPath + '/';
   protractorUtil.logInfo('Creating reporter at ' + dest);
   try {
-    var src = path.join(require.resolve('screenshoter-report-analyzer/dist/index.html'), '../');
-    fse.copy(src, dest);
+    var analyzer = require('screenshoter-report-analyzer');
+    analyzer.setup(dest, context.config.reportOptions);
   } catch (err) {
     console.error(err);
     return;

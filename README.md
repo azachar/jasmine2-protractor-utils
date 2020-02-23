@@ -193,6 +193,9 @@ exports.config = {
        dumpOnExpect: {String}    (Default - 'failure', 'failure+success', 'none'),
        dumpOnSpec: {String}    (Default - 'none', 'failure+success', 'failure'),
        dump: {Function} (Default - null),
+       reportOptions: {
+           injectToHead: {String} (Default - null)
+       },
        onPrepare: function () {
         // returning the promise makes protractor wait for the reporter config before executing tests
         return global.browser.getProcessedConfig().then(function (config) {
@@ -475,6 +478,12 @@ Please do not specify this flag, if you don't supply any such keywords.
 An array of `suites` (protractor.config.suites) where the failTestOnErrorLog will run.
 
 Please do not specify this flag, if you want all your tests to run through this failTestOnErrorLog validation.
+
+### injectToHead
+
+HTML source to appended into `<head>` section of the report page.
+
+For example, you can use this to load CSS from CDN.
 
 # Development
 

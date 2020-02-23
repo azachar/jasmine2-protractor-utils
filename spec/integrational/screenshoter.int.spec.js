@@ -1554,4 +1554,26 @@ describe("Screenshoter running under protractor", function() {
 
     });
   });
+
+  describe("Should support injectToHead", function() {
+    beforeAll(function() {
+      runProtractorWithConfig('injectToHead.js');
+    });
+
+    it("injected element should exist", function(done) {
+      fs.readFile('.tmp/injectToHead/index.html', 'utf8', function(err, data) {
+        if (err) {
+          return done.fail(err);
+        }
+
+        var cheerio = require('cheerio');
+        var $ = cheerio.load(data);
+
+        expect($('head #injected-to-head').length).toEqual(1);
+
+        done();
+      });
+
+    });
+  });
 });
