@@ -447,7 +447,7 @@ protractorUtil.registerJasmineReporter = function(context) {
           prefix: ''
         };
         global.browser.getProcessedConfig().then(function(config) {
-          if(config.capabilities) {
+          if (config.capabilities) {
             protractorUtil.test.prefix = '[' + config.capabilities.name + '] ';
           }
           protractorUtil.testResults.push(protractorUtil.test);
@@ -457,7 +457,7 @@ protractorUtil.registerJasmineReporter = function(context) {
       protractorUtil.takeOnSpecDone(result, context, protractorUtil.test); //exec async operation
 
       //Add defined name to the test.description as a prefix
-      if(context.config.addPrefixToTests) {
+      if (context.config.addPrefixToTests) {
         result.description = protractorUtil.test.prefix + result.description;
         result.fullName = protractorUtil.test.prefix + result.fullName;
       }

@@ -128,14 +128,14 @@ describe("Screenshoter unit", function() {
 
   it("should merge user config", function() {
     screenshoter.config = {
-      screenshotPath: 'REPORTS',
+      screenshotPath: 'REPORTS2',
       screenshotOnSpec: 'failure'
     };
     screenshoter.setup();
     expect(screenshoter.config.reportFile).toBeDefined();
     delete screenshoter.config.reportFile;
     expect(screenshoter.config).toEqual({
-      screenshotPath: 'REPORTS',
+      screenshotPath: 'REPORTS2',
       withLogs: true,
       screenshotOnExpect: 'failure+success',
       screenshotOnSpec: 'failure',

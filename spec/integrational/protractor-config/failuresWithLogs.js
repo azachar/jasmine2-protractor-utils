@@ -8,6 +8,10 @@ exports.config = {
     browserName: env.capabilities.browserName,
     loggingPrefs: {
       browser: 'ALL' // "OFF", "SEVERE", "WARNING", "INFO", "CONFIG", "FINE", "FINER", "FINEST", "ALL".
+    },
+    // For chrome 75+
+    'goog:loggingPrefs': {
+      browser: 'ALL'
     }
   },
   plugins: [{

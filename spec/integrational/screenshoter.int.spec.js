@@ -1537,18 +1537,18 @@ describe("Screenshoter running under protractor", function() {
 
         var report = getReportAsJson(data);
         //Since we can't guarantee which one of the test-specs will end up firts, I've to do a matcher validation between "M" and "L" letters.
-        expect(report.tests[0].description).toMatch('\[[M|L]\] should greet the named user');
-        expect(report.tests[0].fullName).toMatch('\[[M|L]\] angularjs homepage should greet the named user');
-        expect(report.tests[1].description).toMatch('\[[M|L]\] should list todos');
-        expect(report.tests[1].fullName).toMatch('\[[M|L]\] angularjs homepage todo list should list todos');
-        expect(report.tests[2].description).toMatch('\[[M|L]\] should add a todo');
-        expect(report.tests[2].fullName).toMatch('\[[M|L]\] angularjs homepage todo list should add a todo');
-        expect(report.tests[3].description).toMatch('\[[M|L]\] should greet the named user');
-        expect(report.tests[3].fullName).toMatch('\[[M|L]\] angularjs homepage should greet the named user');
-        expect(report.tests[4].description).toMatch('\[[M|L]\] should list todos');
-        expect(report.tests[4].fullName).toMatch('\[[M|L]\] angularjs homepage todo list should list todos');
-        expect(report.tests[5].description).toMatch('\[[M|L]\] should add a todo');
-        expect(report.tests[5].fullName).toMatch('\[[M|L]\] angularjs homepage todo list should add a todo');
+        expect(report.tests[0].description).toMatch('\\[[M|L]\\] should greet the named user');
+        expect(report.tests[0].fullName).toMatch('\\[[M|L]\\] angularjs homepage should greet the named user');
+        expect(report.tests[1].description).toMatch('\\[[M|L]\\] should list todos');
+        expect(report.tests[1].fullName).toMatch('\\[[M|L]\\] angularjs homepage todo list should list todos');
+        expect(report.tests[2].description).toMatch('\\[[M|L]\\] should add a todo');
+        expect(report.tests[2].fullName).toMatch('\\[[M|L]\\] angularjs homepage todo list should add a todo');
+        expect(report.tests[3].description).toMatch('\\[[M|L]\\] should greet the named user');
+        expect(report.tests[3].fullName).toMatch('\\[[M|L]\\] angularjs homepage should greet the named user');
+        expect(report.tests[4].description).toMatch('\\[[M|L]\\] should list todos');
+        expect(report.tests[4].fullName).toMatch('\\[[M|L]\\] angularjs homepage todo list should list todos');
+        expect(report.tests[5].description).toMatch('\\[[M|L]\\] should add a todo');
+        expect(report.tests[5].fullName).toMatch('\\[[M|L]\\] angularjs homepage todo list should add a todo');
         done();
       });
 

@@ -1,27 +1,10 @@
 language: node_js
 node_js:
   - "node"
-sudo: required
-dist: trusty
-addons:
-  firefox: latest
-  apt:
-    sources:
-     - google-chrome
-    packages:
-     - google-chrome-stable
-     - graphicsmagick
-
-before_script:
-  - export CHROME_BIN=/usr/bin/google-chrome
-  - export DISPLAY=:99.0
-  - sh -e /etc/init.d/xvfb start
-  - npm run setup
-  - nohup bash -c "npm run server &> selenium-server.log &"
-  - sleep 10
-after_success:
-  - npm run coverage
-  - npm run lint
+services:
+  - docker
+script:
+  - docker-compose run --rm --use-aliases app
 deploy:
   provider: npm
   email: andrej@chocolatejar.eu

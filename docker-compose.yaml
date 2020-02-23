@@ -1,0 +1,65 @@
+version: '2'
+services:
+  app:
+    build:
+      context: .
+    volumes:
+      - .:/app
+      - /app/node_modules
+    working_dir: /app
+    environment:
+      - SELENIUM_URL=http://selenium:4444/wd/hub
+      # To have report.ci defined
+      - TRAVIS=1
+      - TRAVIS_JOB_NUMBER=dummy
+      - TRAVIS_BRANCH=dummy
+      - TRAVIS_COMMIT=dummy
+      - TRAVIS_TAG=dummy
+      - TRAVIS_REPO_SLUG=dummy
+      - TRAVIS_COMMIT_MESSAGE=dummy
+      - TRAVIS_BUILD_ID=dummy
+    command:
+      - /bin/sh
+      - -x
+      - -e
+      - -c
+      - |
+        sleep 10
+        npm test
+        npm run coverage
+        npm run lint
+    depends_on:
+      - firefox
+      - chrome
+    networks:
+      - default
+  selenium:
+    image: selenium/hub
+    ports:
+      - 4444
+    networks:
+      - default
+  firefox:
+    image: selenium/node-firefox
+    volumes:
+      - /dev/shm:/dev/shm
+    depends_on:
+      - selenium
+    environment:
+      - HUB_HOST=selenium
+    networks:
+      - default
+  chrome:
+    image: selenium/node-chrome
+    volumes:
+      - /dev/shm:/dev/shm
+    depends_on:
+      - selenium
+    environment:
+      - HUB_HOST=selenium
+      # https://github.com/SeleniumHQ/docker-selenium/issues/87
+      - DBUS_SESSION_BUS_ADDRESS=/dev/null
+      - NODE_MAX_INSTANCES=2
+      - NODE_MAX_SESSION=2
+    networks:
+      - default

@@ -1,0 +1,7 @@
+/.git
+/.nyc_output
+/.tmp
+/node_modules
+/reports
+/REPORTS2
+/coverage.lcov
