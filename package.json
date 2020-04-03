@@ -52,7 +52,7 @@
     "fs-extra": "^7.0.0",
     "klaw-sync": "^6.0.0",
     "lodash": "^4.17.11",
-    "mkdirp": "^0.5.1",
+    "mkdirp": "^1.0.4",
     "moment": "^2.20.1",
     "q": "^1.5.1",
     "screenshoter-report-analyzer": "^0.6",
