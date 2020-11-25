@@ -388,7 +388,6 @@ protractorUtil.joinReports = function(context, done) {
       var report = fse.readJsonSync(reports[i].path);
       for (var j = 0; j < report.tests.length; j++) {
         var test = report.tests[j];
-        console.log(context.config.combineIdenticalTests);
         if (context.config.combineIdenticalTests) {
           const existingTest = data.tests.find(t => t.id === test.id);
           if (existingTest) {
