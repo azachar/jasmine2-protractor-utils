@@ -34,7 +34,6 @@ try { // optional dependency, ignore if not installed
  *      writeReportFreq: {String}      (Default - 'end', 'spec', 'asap'),
  *      screenshotPath: {String}                (Default - 'reports/screenshots')
  *      clearFoldersBeforeTest: {Boolean}       (Default - false),
- *      addPrefixToTests: {Boolean}  (Default - false),
  *      failTestOnErrorLog: {
  *               failTestOnErrorLogLevel: {Number},  (Default - 900)
  *               excludeKeywords: {A JSON Array}
@@ -139,17 +138,17 @@ protractorUtil.takeRawHtml = function(context, report) {
     var finalFile = context.config.screenshotPath + '/' + snapshotFile;
 
     browserInstance.getPageSource().then(function(html) {
-        fse.writeFile(finalFile, html, 'utf8', function(err) {
-          if (err) {
-            return cb(err);
-          }
-          report(snapshotFile, browserName, finalFile, browserInstance, cb);
+          fse.writeFile(finalFile, html, 'utf8', function(err) {
+            if (err) {
+              return cb(err);
+            }
+            report(snapshotFile, browserName, finalFile, browserInstance, cb);
+          });
+        },
+        function(err) {
+          console.warn('Error in browser instance ' + browserName + ' while taking the raw html: ' + finalFile + ' - ' + err.message);
+          cb(err);
         });
-      },
-      function(err) {
-        console.warn('Error in browser instance ' + browserName + ' while taking the raw html: ' + finalFile + ' - ' + err.message);
-        cb(err);
-      });
   }
 
   protractorUtil.forEachBrowser(takeInstanceRawHtml);
@@ -297,6 +296,7 @@ protractorUtil.takeOnSpecDone = function(result, context, test) {
   }
   if (makeScreenshotsFromEachBrowsers) {
     protractorUtil.takeScreenshot(context, function(file, browserName, finalFile, browserInstance, done) {
+      console.log(browserName);
       test.specScreenshots.push({
         img: file,
         browser: browserName,
@@ -388,7 +388,23 @@ protractorUtil.joinReports = function(context, done) {
       var report = fse.readJsonSync(reports[i].path);
       for (var j = 0; j < report.tests.length; j++) {
         var test = report.tests[j];
-        data.tests.push(test);
+        if (context.config.combineIdenticalTests) {
+          const existingTest = data.tests.find(t => t.id === test.id);
+          if (existingTest) {
+            existingTest.specScreenshots = existingTest.specScreenshots.concat(test.specScreenshots);
+            existingTest.specLogs = existingTest.specLogs.concat(test.specLogs);
+            existingTest.specHtmls = existingTest.specHtmls.concat(test.specHtmls);
+            existingTest.failedExpectations = existingTest.failedExpectations.concat(test.failedExpectations);
+            existingTest.passedExpectations = existingTest.passedExpectations.concat(test.passedExpectations);
+            if (existingTest.failedExpectations.length) {
+              existingTest.status = 'failed';
+            }
+          } else {
+            data.tests.push(test);
+          }
+        } else {
+          data.tests.push(test);
+        }
       }
       data.stat.passed += report.stat.passed || 0;
       data.stat.failed += report.stat.failed || 0;
@@ -425,7 +441,6 @@ protractorUtil.installReporter = function(context) {
 };
 
 protractorUtil.registerJasmineReporter = function(context) {
-
   jasmine.getEnv().addReporter({
     jasmineStarted: function() {
       global.screenshotBrowsers = {};
@@ -437,30 +452,18 @@ protractorUtil.registerJasmineReporter = function(context) {
       }
     },
     specStarted: function() {
-        protractorUtil.test = {
-          start: moment(),
-          specScreenshots: [],
-          specLogs: [],
-          specHtmls: [],
-          failedExpectations: [],
-          passedExpectations: [],
-          prefix: ''
-        };
-        global.browser.getProcessedConfig().then(function(config) {
-          if(config.capabilities) {
-            protractorUtil.test.prefix = '[' + config.capabilities.name + '] ';
-          }
-          protractorUtil.testResults.push(protractorUtil.test);
-        });
+      protractorUtil.test = {
+        start: moment(),
+        specScreenshots: [],
+        specLogs: [],
+        specHtmls: [],
+        failedExpectations: [],
+        passedExpectations: []
+      };
+      protractorUtil.testResults.push(protractorUtil.test);
     },
     specDone: function(result) {
       protractorUtil.takeOnSpecDone(result, context, protractorUtil.test); //exec async operation
-
-      //Add defined name to the test.description as a prefix
-      if(context.config.addPrefixToTests) {
-        result.description = protractorUtil.test.prefix + result.description;
-        result.fullName = protractorUtil.test.prefix + result.fullName;
-      }
 
       //calculate total fails, success and so on
       if (!protractorUtil.stat[result.status]) {
@@ -620,7 +623,7 @@ protractorUtil.prototype.setup = function() {
     dump: null,
     htmlReport: true,
     writeReportFreq: 'end',
-    addPrefixToTests: false
+    combineIdenticalTests: true,
   }
 
   this.ci = this.obtainCIVariables(process.env);
@@ -667,7 +670,7 @@ protractorUtil.prototype.setup = function() {
 
 
   var pjson = require(__dirname + '/package.json');
-  protractorUtil.logInfo('Activated Protractor Screenshoter Plugin, ver. ' + pjson.version + ' (c) 2016 - ' + new Date().getFullYear() + ' ' + pjson.author + ' and contributors');
+  protractorUtil.logInfo('Activated Protractor Screenshoter Plugin, ver. ' + pjson.version + ' (c) 2016 - ' + new Date().getFullYear() + ' ' + pjson.author.name + ' and contributors');
   protractorUtil.logDebug('The resolved configuration is:');
   protractorUtil.logDebug(this.config);
 };

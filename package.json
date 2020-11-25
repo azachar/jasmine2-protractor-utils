@@ -1,6 +1,6 @@
 {
   "name": "protractor-screenshoter-plugin",
-  "version": "0.10.3",
+  "version": "0.11.0",
   "description": "A jasmine2 protractor plugin that captures for each browser instance a screenshot and browsers' console logs. The snapshot is made optionally for each expect or spec. Plugins comes with a beautiful angular based analytics tool to visually check and fix tests results.",
   "main": "index.js",
   "scripts": {
@@ -40,7 +40,8 @@
   ],
   "author": "Andrej Zachar",
   "contributors": [
-    "Abhishek Swain"
+    "Abhishek Swain",
+    "Svyatoslav Miller"
   ],
   "license": "MIT",
   "bugs": {

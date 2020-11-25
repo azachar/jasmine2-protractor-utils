@@ -184,6 +184,7 @@ exports.config = {
        imageToAscii: {String}    (Default - 'none', 'failure+success', 'failure'),
        imageToAsciiOpts:{Obbject} (Default - {bg:true})
        clearFoldersBeforeTest: {Boolean}       (Default - false),
+       combineIdenticalTests: {Boolean}       (Default - true),
        failTestOnErrorLog: {
                 failTestOnErrorLogLevel: {Number},  (Default - 900)
                 excludeKeywords: {A JSON Array}
@@ -463,6 +464,12 @@ _NOTE: This works only on chrome!_
 Log level, the test fails of the browser console log has logs **more than** this specified level.
 
 Default: `900`
+
+### combineIdenticalTests
+
+Combine the same tests when testing in multiple browsers at the same time
+
+Default: `true`
 
 ### excludeKeywords
 
